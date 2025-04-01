@@ -1,2 +1,5 @@
-export default function Initial(){
+function page() {
+  return <div>page</div>;
 }
+
+export default page;
