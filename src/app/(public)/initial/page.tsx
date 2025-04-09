@@ -15,12 +15,12 @@ function page() {
         ></Image>
         <h1 className="font-bold text-6xl my-12">Olá!</h1>
         <Link href={"/sign-in"}>
-          <Button className="font-semibold cursor-pointer hover:bg-[#FF9D00]/70 bg-[#FF9D00] inset-shadow-sm text-bla inset-shadow-black/40 text-xl py-7 px-7 rounded-3xl">
+          <Button className="font-semibold cursor-pointer hover:bg-solar/70 bg-solar inset-shadow-sm text-bla inset-shadow-black/40 text-xl py-7 px-7 rounded-3xl">
             Ja possuo Cadastro
           </Button>
         </Link>
         <Link href={"/sign-up"}>
-          <Button className="mt-5 font-semibold cursor-pointer hover:bg-[#ABCFB5]/70 bg-[#ABCFB5] inset-shadow-sm text-bla inset-shadow-black/40 text-xl py-7 px-7 rounded-3xl">
+          <Button className="mt-5 font-semibold cursor-pointer hover:bg-mint/70 bg-mint inset-shadow-sm text-bla inset-shadow-black/40 text-xl py-7 px-7 rounded-3xl">
             Quero me Cadastrar
           </Button>
         </Link>
