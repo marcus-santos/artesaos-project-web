@@ -3,6 +3,22 @@
 
 @custom-variant dark (&:is(.dark *));
 
+@theme {
+  --color-solar: #ff9d00;
+  --color-mint: #abcfb5;
+  --color-solar-: #ff9d00;
+  --color-mint: #abcfb5;
+  --color-mint-50: #e0eae3;
+  --color-mint-700: #334137;
+  --color-mint-200: #abcfb5;
+  --color-mint-600: 1B7132;
+  --color-golden: #ffbb00;
+  --color-golden-50: #fffdf3;
+  --color-golden-100: #fffed6;
+  --color-magenta: #e00061;
+  --color-grape: #6c1b71;
+}
+
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
