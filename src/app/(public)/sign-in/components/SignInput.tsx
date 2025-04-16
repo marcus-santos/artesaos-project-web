@@ -4,15 +4,16 @@ import { forwardRef } from "react";
 interface SignInputProps{
   placeholder: string;
   type: string;
+  className?: string;
 }
 
 const SignInput = forwardRef<HTMLInputElement, SignInputProps>(
-  ({placeholder,type, ...rest}, ref) => {
+  ({placeholder,type, className ,...rest}, ref) => {
 
     return(
       <Input ref={ref}
-      className="bg-[#E4F5E9] placeholder:text-color-mint-700 placeholder:px-3 placeholder:text-sm 
-      placeholder:font-bold w-full  h-12 rounded-3xl inset-shadow-sm inset-shadow-black/40" 
+      className={`bg-[#E4F5E9] placeholder:text-color-mint-700 placeholder:px-3 placeholder:text-sm 
+      placeholder:font-bold w-full  h-12 rounded-3xl inset-shadow-sm inset-shadow-black/40 ${className}`}
       type={type} placeholder={placeholder}
       {...rest}/>
     )

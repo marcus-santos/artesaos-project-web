@@ -11,14 +11,14 @@ import { useRouter } from "next/navigation";
 
 
 const loginSchema = z.object({
-  email: z.string().email('Email inválido'),
+  email: z.string().email('Email e/ou senha Inválidos'),
   password: z
     .string()
-    .min(8, 'Senha Inválida - minimo de 8')
-    .regex(/[!@#$%*&^(),.?":{}|<>]/, 'Senha Inválida - caractere especial')
-    .regex(/[A-Z]/, 'Senha Inválida - letra maiuscula')
-    .regex(/[a-z]/, 'Senha Inválida - letra minuscula')
-    .regex(/[0-9]/, 'Senha Inválida - numero')
+    .min(8, 'Email e/ou senha Inválidos')
+    .regex(/[!@#$%*&^(),.?":{}|<>]/, 'Email e/ou senha Inválidos')
+    .regex(/[A-Z]/, 'Email e/ou senha Inválidos')
+    .regex(/[a-z]/, 'Email e/ou senha Inválidos')
+    .regex(/[0-9]/, 'Email e/ou senha Inválidos')
 });
 
 type LoginFormData = z.infer<typeof loginSchema>;
@@ -53,17 +53,34 @@ function page() {
           <p className="text-xl italic mt-2">Bom te ver de novo!</p>
         </div>
         <div>
-          <form className="space-y-3 mb-3" onSubmit={handleSubmit(onSubmit)}>
-            <SignInput placeholder={"Email"} type={"email"} {...register('email')} />
-            {errors.email && (
-              <p className="text-red-500 text-sm">{errors.email.message}</p>
+          <form className="space-y-3 mb-3 text-end" onSubmit={handleSubmit(onSubmit)}>
+            <SignInput 
+              className={`${
+                errors.email
+                ?"border-magenta border-2 focus-visible:ring-2 focus-visible:border-magenta placeholder:text-magenta "
+                  :"border-gray-300 "
+              }`}
+              placeholder={"Email"} 
+              type={"email"} 
+              {...register('email')} 
+            />
+
+            <SignInput
+            className={`${
+              errors.password
+                ?"border-magenta border-2 focus-visible:ring-2 focus-visible:border-magenta placeholder:text-magenta "
+                :"border-gray-300"
+            }`} 
+              placeholder={"Senha"} 
+              type={"password"} 
+              {...register('password')}
+            />
+            {(errors.email || errors.password) &&(
+              <p className="ml-3 text-sm text-magenta text-bold text-start font-semibold">
+                {errors.email?.message || errors.password?.message}</p>
             )}
 
-            <SignInput placeholder={"Senha"} type={"password"} {...register('password')}/>
-            {errors.password && (
-              <p className="text-red-500 text-sm">{errors.password.message}</p>
-            )}
-            <Link className="underline italic text-sm text-end block" href="/#">Esqueceu sua senha?</Link>
+            <Link className="underline italic text-sm text-end" href="/#">Esqueceu sua senha?</Link>
             <div className="w-full flex justify-center mt-10">
             <Button
               type="submit"
