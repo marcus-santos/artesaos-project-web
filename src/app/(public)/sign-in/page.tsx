@@ -35,9 +35,28 @@ function page() {
     resolver: zodResolver(loginSchema)
   });
   
-  const onSubmit = (data: LoginFormData) => {
-    console.log('Dados válidos:', data);
-    router.push('/');
+  const onSubmit = async (data: LoginFormData) => {
+    try{
+      const response = await fetch('https://nest-api-fork.onrender.com/sessions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data)
+      });
+
+      if(!response.ok) {
+        throw new Error('Erro ao fazer login')
+      }
+    
+
+      const result = await response.json();
+      console.log('Resposta da API:', result);
+      router.push('/');
+
+    }catch(error){
+    console.error('Erro:', error);
+    }
   }
 
   
@@ -55,22 +74,13 @@ function page() {
         <div>
           <form className="space-y-3 mb-3 text-end" onSubmit={handleSubmit(onSubmit)}>
             <SignInput 
-              className={`${
-                errors.email
-                ?"border-magenta border-2 focus-visible:ring-2 focus-visible:border-magenta placeholder:text-magenta "
-                  :"border-gray-300 "
-              }`}
+              hasError={!!errors.email}
               placeholder={"Email"} 
               type={"email"} 
               {...register('email')} 
             />
-
             <SignInput
-            className={`${
-              errors.password
-                ?"border-magenta border-2 focus-visible:ring-2 focus-visible:border-magenta placeholder:text-magenta "
-                :"border-gray-300"
-            }`} 
+              hasError={!!errors.password}
               placeholder={"Senha"} 
               type={"password"} 
               {...register('password')}
@@ -79,12 +89,12 @@ function page() {
               <p className="ml-3 text-sm text-magenta text-bold text-start font-semibold">
                 {errors.email?.message || errors.password?.message}</p>
             )}
-
             <Link className="underline italic text-sm text-end" href="/#">Esqueceu sua senha?</Link>
             <div className="w-full flex justify-center mt-10">
             <Button
               type="submit"
-              className="bg-[#E05D00] w-[191px] h-[42px] rounded-2xl border-b-3 border-[#c04500] hover:bg-[#c04500] cursor-pointer">
+              className="bg-solar-700 w-[191px] h-[42px] rounded-2xl border-b-3 border-[#c04500] 
+              hover:bg-[#c04500] cursor-pointer">
               Continuar
             </Button>
             </div>
