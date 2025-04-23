@@ -1,21 +1,14 @@
 import { Input } from "@/components/ui/input";
-import { forwardRef } from "react";
 
-const SignInput = forwardRef<
-  HTMLInputElement,
-  React.InputHTMLAttributes<HTMLInputElement> & { hasError?: boolean }
->(({ hasError, className, ...props }, ref) => (
-  <Input
-    ref={ref}
-    className={`${className} ${
-      hasError
-        ? "border-magenta border-2 focus-visible:ring-2 focus-visible:border-magenta placeholder:text-magenta"
-        : "border-none placeholder:text-[#985E00]"
-    } w-full h-10 bg-[#FFF2DE]  rounded-[20px] shadow-[inset_0_2px_6px_rgba(0,0,0,0.4)] font-bold`}
-    {...props}
-  />
-));
+interface SignInputProps{
+  placeholder: string;
+  type: string;
+}
 
-SignInput.displayName = "SignInput";
+function SignInput(props: SignInputProps){
+  return(
+    <Input className="w-full h-12 bg-[#FFF2DE] placeholder:text-[#985E00] rounded-[20px] shadow-[inset_0_2px_6px_rgba(0,0,0,0.4)] border border-none font-bold" type={props.type} placeholder={props.placeholder}/>
+  )
+}
 
 export default SignInput;
