@@ -32,6 +32,10 @@ function SignIn({ children }: { children: React.ReactNode }) {
   const [backendError, setBackendError] = useState<string | null>(null);
   const [visiblePassword, setVisiblePassword] = useState<boolean>(false);
   const router = useRouter();
+  const errorMessages: Record<string, string> = {
+    'Invalid credentials': 'Credenciais inválidas',
+    'Internal server error': 'Erro interno do servidor',
+  };
 
   const {
     register,
@@ -51,27 +55,29 @@ function SignIn({ children }: { children: React.ReactNode }) {
         body: JSON.stringify(data)
       });
 
-      if (response.status === 500) {
-        setBackendError('Credenciais Incorretas');
-      }
-      else if (response.status === 201) {
-        router.push('/');
-      }
-
-
       const result = await response.json();
       console.log('Resposta da API:', result);
 
-    } catch (error) {
-      console.error('Erro:', error);
+      if (response.ok) {
+        localStorage.setItem('token', result.accessToken);
+        const role = result.role;
+        console.log(role);
+        router.push('/');
+      } else {
+        const errorData = errorMessages[result.message];
+        setBackendError(errorData);
+      }
+
+    } catch (errorData) {
+      console.error('Erro:', errorData);
     }
   }
   return (
-    <div className="flex flex-col items-center md:justify-center h-screen">
+    <div className="flex flex-col items-center justify-center">
 
-      <div className="rounded-lg p-[44px] min-w-[393px] md:border-1  md:shadow-md w-">
+      <div className="rounded-lg p-[44px] w-full">
         {children}
-        <div className="mt-28 mb-14 md:mt-14">
+        <div className="mt-6 mb-14 ">
           <DialogTitle className="text-5xl md:text-[45px] font-bold">Olá!</DialogTitle>
           <p className="text-xl italic mt-2">Bom te ver de novo!</p>
         </div>
