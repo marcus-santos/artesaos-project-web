@@ -38,7 +38,7 @@ function AuthenticationModal() {
           Entre ou cadastre-se
         </Button>
       </DialogTrigger>
-      <DialogContent className="w-full h-screen rounded-none sm:rounded-xl sm:h-fit sm:max-w-[425px]">
+      <DialogContent className="w-full h-[98vh] rounded-xl sm:h-fit sm:max-w-[425px]">
         {modalState === 0 && (
           <div className="flex flex-col justify-center gap-8">
             <Image
