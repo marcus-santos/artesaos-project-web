@@ -1,18 +1,16 @@
 'use client'
 
 import { DialogTitle } from "@radix-ui/react-dialog";
-import React from "react";
+import React, { useState } from "react";
 import { FiEye, FiEyeOff } from "react-icons/fi";
 import Link from "next/link";
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/button";
 import SignInput from "../AuthenticationModal/SignInput";
 import { z } from "zod";
-import { useForm } from 'react-hook-form'
+import { useForm } from 'react-hook-form';
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
-
-
+import { Loader2 } from "lucide-react"; // Ícone de carregamento do Lucide Icons
 
 const loginSchema = z.object({
   email: z.string().email('Email e/ou senha Incorretos'),
@@ -31,11 +29,17 @@ function SignIn({ children }: { children: React.ReactNode }) {
 
   const [backendError, setBackendError] = useState<string | null>(null);
   const [visiblePassword, setVisiblePassword] = useState<boolean>(false);
+  const [isOpen, setOpen] = useState<boolean>(true);
+  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const errorMessages: Record<string, string> = {
     'Invalid credentials': 'Credenciais inválidas',
     'Internal server error': 'Erro interno do servidor',
   };
+
+  const handleCloseModal = () => {
+    setOpen(false);
+  }
 
   const {
     register,
@@ -46,32 +50,31 @@ function SignIn({ children }: { children: React.ReactNode }) {
   });
 
   const onSubmit = async (data: LoginFormData) => {
+    setIsLoading(true); // Ativa o estado de carregamento
     try {
       const response = await fetch('https://nest-api-fork.onrender.com/sessions', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(data)
+        body: JSON.stringify(data),
       });
 
       const result = await response.json();
-      console.log('Resposta da API:', result);
 
       if (response.ok) {
-        localStorage.setItem('token', result.accessToken);
-        const role = result.role;
-        console.log(role);
-        router.push('/');
+
       } else {
         const errorData = errorMessages[result.message];
         setBackendError(errorData);
       }
-
     } catch (errorData) {
       console.error('Erro:', errorData);
+    } finally {
+      setIsLoading(false); // Desativa o estado de carregamento
     }
   }
+
   return (
     <div className="flex flex-col items-center justify-center">
 
@@ -116,10 +119,19 @@ function SignIn({ children }: { children: React.ReactNode }) {
             <Link className="underline italic text-sm text-end" href="/#">Esqueceu sua senha?</Link>
             <div className="w-full flex justify-center mt-10">
               <Button
+                onClick={handleCloseModal}
                 type="submit"
                 className="bg-solar-700 w-[191px] h-[42px] rounded-2xl border-b-3 border-[#c04500] 
-              hover:bg-[#c04500] cursor-pointer">
-                Continuar
+              hover:bg-[#c04500] cursor-pointer"
+                disabled={isLoading}>
+                {isLoading ? (
+                  <>
+                    <Loader2 className="animate-spin" size={20} />
+                    <p>Carregando</p>
+                  </>
+                ) : (
+                  "Continuar"
+                )}
               </Button>
             </div>
           </form>
