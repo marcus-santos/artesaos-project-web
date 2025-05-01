@@ -2,7 +2,6 @@
 
 import React, { useEffect, useRef, useState } from "react";
 import { DialogTitle } from "@radix-ui/react-dialog";
-import { useRouter } from "next/navigation";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -14,6 +13,7 @@ import {
 import { FaExclamationTriangle, FaRegCalendarAlt } from "react-icons/fa";
 import SignInput from "../AuthenticationModal/SignInput";
 import { Button } from "@/components/ui/button";
+import { DialogClose } from "@radix-ui/react-dialog";
 
 // Validação com Zod
 const signUpSchema = z
@@ -22,11 +22,9 @@ const signUpSchema = z
       .string()
       .min(2, { message: "Digite um nome com pelo menos 2 letras." }),
     socialName: z.string().optional(),
-    cpf: z
-      .string()
-      .regex(/^\d{11}$/, {
-        message: "O CPF deve conter exatamente 11 números.",
-      }),
+    cpf: z.string().regex(/^\d{11}$/, {
+      message: "O CPF deve conter exatamente 11 números.",
+    }),
     email: z
       .string()
       .nonempty({ message: "O e-mail é obrigatório." })
@@ -93,8 +91,21 @@ const signUpSchema = z
 
 type SignUpData = z.infer<typeof signUpSchema>;
 
+// Função para traduzir mensagens de erro
+async function traduzirErro(mensagem: string): Promise<string> {
+  const texto = Array.isArray(mensagem) ? mensagem.join(" ") : mensagem;
+  const res = await fetch(
+    `https://api.mymemory.translated.net/get?q=${encodeURIComponent(
+      texto
+    )}&langpair=en|pt-br`
+  );
+  const data = await res.json();
+  return data.responseData.translatedText || texto;
+}
+
+// Componente principal
 export default function SignUp({ children }: { children: React.ReactNode }) {
-  const router = useRouter();
+  const closeButtonRef = useRef<HTMLButtonElement>(null);
   const API_URL =
     process.env.NEXT_PUBLIC_API_URL ||
     "https://nest-api-fork.onrender.com/users";
@@ -141,11 +152,6 @@ export default function SignUp({ children }: { children: React.ReactNode }) {
     setVisibleFields((prev) => ({ ...prev, [field]: !prev[field] }));
   };
 
-  const showUiError = (message: string) => {
-    setUiError(message);
-    setTimeout(() => setUiError(null), 5000);
-  };
-
   // Fecha popover ao clicar fora
   useEffect(() => {
     function handleClickOutside(e: MouseEvent) {
@@ -169,6 +175,30 @@ export default function SignUp({ children }: { children: React.ReactNode }) {
     }
   }, [errors, isSubmitted]);
 
+  // Faz o login após o cadastro
+  const loginUser = async (email: string, password: string) => {
+    try {
+      const res = await fetch("https://nest-api-fork.onrender.com/sessions", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      });
+      const body = await res.json();
+
+      if (!res.ok) {
+        throw new Error(body.message || "Erro ao fazer login.");
+      }
+
+      localStorage.setItem("authToken", body.token);
+
+      showUiError("Usuário criado e logado com sucesso!");
+      closeButtonRef.current?.click();
+    } catch (err: any) {
+      showUiError(err.message || "Erro inesperado ao fazer login.");
+    }
+  };
+
+  // Cria o usuário
   const createUser = async (data: SignUpData) => {
     const payload = {
       name: data.name,
@@ -189,42 +219,49 @@ export default function SignUp({ children }: { children: React.ReactNode }) {
       });
       const body = await res.json();
 
-      console.log("Response:", body);
       if (!res.ok) {
         if (res.status === 400 && body.errors) {
-          (
-            Object.entries(body.errors) as [keyof SignUpData, string[]][]
-          ).forEach(([field, msgs]) => {
-            setFormError(field, { type: "server", message: msgs[0] });
-          });
-          throw new Error(body.message || "Erro de validação");
+          await Promise.all(
+            (Object.entries(body.errors) as [keyof SignUpData, string[]][]).map(
+              async ([field, msgs]) => {
+                const msgTraduzida = await traduzirErro(msgs[0]);
+                setFormError(field as keyof SignUpData, {
+                  type: "server",
+                  message: msgTraduzida,
+                });
+              }
+            )
+          );
+          return;
         }
-        if (res.status === 409)
-          throw new Error(body.message || "Usuário já existe.");
-        throw new Error(body.message || "Erro ao criar usuário.");
+        if (res.status === 409) {
+          await showUiError(body.message || "Usuário já existe.");
+          return;
+        }
+        await showUiError(body.message || "Erro ao criar usuário.");
+        return;
       }
-      showUiError("Usuário criado com sucesso!");
-      setTimeout(() => router.replace("/"), 500);
+
+      await loginUser(data.email, data.password);
+      await showUiError("Usuário criado e logado com sucesso!");
     } catch (err: any) {
-      showUiError(err.message || "Erro inesperado.");
+      await showUiError(err.message || "Erro inesperado.");
     }
   };
 
+  // Exibe mensagem de erro na UI
+  const showUiError = async (message: string) => {
+    const traduzida = await traduzirErro(message);
+    setUiError(traduzida);
+    setTimeout(() => setUiError(null), 5000);
+  };
+
+  // Envia os dados do formulário
   const onSubmit: SubmitHandler<SignUpData> = async (data) => {
-    try {
-      await createUser(data);
-
-      if (data.isArtisan) {
-        console.log("Continuerão para o cadastro de artesão");
-      } else {
-        showUiError("Usuário criado com sucesso!");
-      }
-    } catch (err: any) {
-      showUiError(err.message || "Erro inesperado.");
-    }
+    await createUser(data);
   };
 
-  // Field component
+  // Formulário para (email, senha, nome, CPF)
   const FormField: React.FC<{
     name: keyof SignUpData;
     placeholder: string;
@@ -245,28 +282,38 @@ export default function SignUp({ children }: { children: React.ReactNode }) {
     </div>
   );
 
+  // Renderiza o componente principal
   return (
     <div className="rounded-lg p-[44px] sm:w-96 w-full">
       <header className="mb-6">
-        {children}
-        <DialogTitle className="text-5xl md:text-[45px] font-bold">
-          Olá!
-        </DialogTitle>
-        <p>
-          Cadastre-se e <br />
-          descubra o melhor do artesanato.
-        </p>
+        {formErrorFlag ? (
+          <div className="flex items-center justify-center text-white bg-magenta mb-4 p-3 rounded-lg text-xs font-bold w-full">
+            <FaExclamationTriangle className="mr-1" />
+            <span>Campo obrigatório ou com formato inválido.</span>
+          </div>
+        ) : (
+          <>
+            {children}
+            <DialogTitle className="text-5xl md:text-[45px] font-bold">
+              Olá!
+            </DialogTitle>
+            <p>
+              Cadastre-se e <br />
+              descubra o melhor do artesanato.
+            </p>
+          </>
+        )}
       </header>
 
       {uiError && (
         <div
-          className={`mb-4 p-3 rounded-lg text-sm text-center ${
+          className={`mb-4 p-3 rounded-lg text-xs text-center ${
             uiError.includes("sucesso")
               ? "bg-mint-600 text-white"
               : "bg-magenta text-white"
           }`}
         >
-          <div className="flex items-center justify-center">
+          <div className="flex items-center text-xs justify-center">
             {!uiError.includes("sucesso") && (
               <FaExclamationTriangle className="mr-2" />
             )}
@@ -284,7 +331,7 @@ export default function SignUp({ children }: { children: React.ReactNode }) {
         <FormField name="cpf" placeholder="CPF*" type="text" />
         <FormField name="email" placeholder="Email*" type="email" />
 
-        <div>
+        <div className="w-full">
           <div className="relative">
             <SignInput
               className="bg-[#FFF2DE] placeholder:text-[#985E00]"
@@ -299,12 +346,14 @@ export default function SignUp({ children }: { children: React.ReactNode }) {
                 setVisibleFields((p) => ({ ...p, calendarVisible: false }))
               }
             />
-            <FaRegCalendarAlt
-              size={16}
-              className={`pointer-events-none absolute right-3 top-1/2 transform -translate-y-1/2 ${
-                errors.birthDate ? "text-magenta" : "text-[#985E00]"
-              }`}
-            />
+            {!visibleFields.calendarVisible && (
+              <FaRegCalendarAlt
+                size={16}
+                className={`pointer-events-none absolute right-3 top-1/2 transform -translate-y-1/2 ${
+                  errors.birthDate ? "text-magenta" : "text-[#985E00]"
+                }`}
+              />
+            )}
           </div>
           {errors.birthDate && (
             <span className="text-sm text-magenta">
@@ -335,9 +384,19 @@ export default function SignUp({ children }: { children: React.ReactNode }) {
               className="absolute right-3 top-1/2 transform -translate-y-1/2"
             >
               {visibleFields.password ? (
-                <AiOutlineEye size={20} />
+                <AiOutlineEye
+                  size={20}
+                  className={
+                    errors.password ? "text-magenta" : "text-[#985E00]"
+                  }
+                />
               ) : (
-                <AiOutlineEyeInvisible size={20} />
+                <AiOutlineEyeInvisible
+                  size={20}
+                  className={
+                    errors.password ? "text-magenta" : "text-[#985E00]"
+                  }
+                />
               )}
             </button>
           </div>
@@ -371,12 +430,23 @@ export default function SignUp({ children }: { children: React.ReactNode }) {
               type="button"
               aria-label="Toggle confirmação"
               onClick={() => toggleVisibility("confirmPassword")}
-              className="absolute right-3 top-1/2 transform -translate-y-1/2"
+              className={`absolute right-3 top-1/2 transform -translate-y-1/2 
+              }`}
             >
               {visibleFields.confirmPassword ? (
-                <AiOutlineEye size={20} />
+                <AiOutlineEye
+                  size={20}
+                  className={
+                    errors.confirmPassword ? "text-magenta" : "text-[#985E00]"
+                  }
+                />
               ) : (
-                <AiOutlineEyeInvisible size={20} />
+                <AiOutlineEyeInvisible
+                  size={20}
+                  className={
+                    errors.confirmPassword ? "text-magenta" : "text-[#985E00]"
+                  }
+                />
               )}
             </button>
           </div>
@@ -418,8 +488,8 @@ export default function SignUp({ children }: { children: React.ReactNode }) {
 
         {(errors.phone || errors.ddd || errors.codigoPais) && (
           <p className="text-sm text-magenta">
-            {errors.phone?.message ||
-              errors.ddd?.message ||
+            {errors.ddd?.message ||
+              errors.phone?.message ||
               errors.codigoPais?.message}
           </p>
         )}
@@ -471,9 +541,10 @@ export default function SignUp({ children }: { children: React.ReactNode }) {
           </div>
         )}
 
-        <div className="text-sm text-gray-600 text-center mb-6">
+        <div className="text-sm text-gray-600 text-center mb-6 font-normal">
           <p>
-            Ao continuar, você concorda com os{" "}
+            Ao continuar, você concorda com os
+            <br />
             <a href="#" className="underline text-black">
               Termos de Uso e Privacidade
             </a>
@@ -484,12 +555,18 @@ export default function SignUp({ children }: { children: React.ReactNode }) {
           <Button
             type="submit"
             disabled={isSubmitting}
-            className="w-[191px] h-[42px] bg-[#E05D00] hover:bg-[#c05000] text-white rounded-[20px] border-b-4 border-[#a04500]"
+            className="w-[191px] h-[42px] bg-solar-700 hover:bg-[#c05000] text-white rounded-[20px] border-b-4 border-[#a04500]"
           >
             {isSubmitting ? "Processando..." : "Continuar"}
           </Button>
         </div>
       </form>
+
+      <DialogClose asChild>
+        <button ref={closeButtonRef} style={{ display: "none" }}>
+          Fechar
+        </button>
+      </DialogClose>
     </div>
   );
 }
