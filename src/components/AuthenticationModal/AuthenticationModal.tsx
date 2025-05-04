@@ -1,4 +1,5 @@
 "use client";
+import React from "react";
 import {
   Dialog,
   DialogContent,
@@ -31,7 +32,6 @@ function AuthenticationModal() {
 
   return (
     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-
       {!user.isAuthenticated && (
         <DialogTrigger asChild>
           <Button
@@ -46,9 +46,7 @@ function AuthenticationModal() {
           </Button>
         </DialogTrigger>
       )}
-      {user.isAuthenticated && (
-        <p>{user.userName}</p>
-      )}
+      {user.isAuthenticated && <p>{user.userName}</p>}
 
       <DialogContent className="w-full h-screen rounded-none sm:rounded-xl sm:h-fit sm:max-w-[425px]">
         {modalState === 0 && (
@@ -60,7 +58,9 @@ function AuthenticationModal() {
               height={110}
               className="mt-6 mx-auto"
             />
-            <DialogTitle className="font-bold text-6xl mx-auto">Olá!</DialogTitle>
+            <DialogTitle className="font-bold text-6xl mx-auto">
+              Olá!
+            </DialogTitle>
             <div className="flex flex-col items-center justify-center gap-8 mt-12 mb-6">
               <Button
                 onClick={openSignIn}
@@ -82,14 +82,20 @@ function AuthenticationModal() {
         )}
         {modalState === 1 && (
           <SignIn onSuccess={() => setIsDialogOpen(false)}>
-            <button onClick={openInitial} className="bg-transparent cursor-pointer">
+            <button
+              onClick={openInitial}
+              className="bg-transparent cursor-pointer"
+            >
               <FiChevronLeft size={28} />
             </button>
           </SignIn>
         )}
         {modalState === 2 && (
           <SignUp>
-            <button onClick={openInitial} className="bg-transparent cursor-pointer">
+            <button
+              onClick={openInitial}
+              className="bg-transparent cursor-pointer"
+            >
               <FiChevronLeft size={28} />
             </button>
           </SignUp>
