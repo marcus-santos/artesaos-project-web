@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -8,6 +8,7 @@ import SignInput from "@/components/AuthenticationModal/SignInput";
 import { Button } from "@/components/ui/button";
 import { FaExclamationTriangle, FaRegCalendarAlt } from "react-icons/fa";
 import { DialogTitle } from "@radix-ui/react-dialog";
+import { DialogClose } from "@radix-ui/react-dialog";
 
 // Validação com Zod para artesão
 const artisanSchema = z.object({
@@ -20,11 +21,9 @@ const artisanSchema = z.object({
   neighborhood: z.string().nonempty({ message: "Bairro é obrigatório." }),
   city: z.string().nonempty({ message: "Cidade é obrigatória." }),
   state: z.string().nonempty({ message: "Estado é obrigatório." }),
-  rawMaterial: z
-    .string()
-    .nonempty({ message: "Matéria-prima é obrigatória." }),
+  rawMaterial: z.string().nonempty({ message: "Matéria-prima é obrigatória." }),
   technique: z.string().nonempty({ message: "Técnica é obrigatória." }),
-  purposeClassification: z
+  finalityClassification: z
     .string()
     .nonempty({ message: "Classificação da finalidade é obrigatória." }),
   sicab: z.string().nonempty({ message: "SICAB é obrigatório." }),
@@ -51,7 +50,13 @@ async function traduzirErro(mensagem: string): Promise<string> {
 }
 
 // Componente principal
-function ArtisanSignUpPage({ children }: { children: React.ReactNode }) {
+function ArtisanSignUpPage({
+  children,
+  token,
+}: {
+  children: React.ReactNode;
+  token: string | null;
+}) {
   const [uiError, setUiError] = useState<string | null>(null);
   const [sicabRegistrationType, setSicabRegistrationType] = useState<
     "text" | "date"
@@ -60,6 +65,7 @@ function ArtisanSignUpPage({ children }: { children: React.ReactNode }) {
     "text"
   );
   const [showFormError, setShowFormError] = useState(false);
+  const closeButtonRef = useRef<HTMLButtonElement>(null);
 
   const showUiError = async (message: string) => {
     const traduzida = await traduzirErro(message);
@@ -70,16 +76,32 @@ function ArtisanSignUpPage({ children }: { children: React.ReactNode }) {
   // Função para criar artesão
   async function createArtisan(data: ArtisanData) {
     try {
-      const res = await fetch("", {
+      console.log(token);
+      console.log(data);
+
+      const res = await fetch("https://nest-api-fork.onrender.com/artisans", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify(data),
+        body: JSON.stringify({
+          rawMaterial: data.rawMaterial,
+          technique: data.technique,
+          finalityClassification: data.finalityClassification,
+          sicab: data.sicab,
+          sisabRegistrationDate: data.sicabRegistration,
+          sisabValidUntil: data.sicabValidity,
+        }),
       });
 
-      console.log("Response status:", res.status);
-      const body = await res.json();
+      const contentType = res.headers.get("content-type");
+      let body = null;
+      if (contentType && contentType.includes("application/json")) {
+        body = await res.json();
+      } else {
+        body = await res.text();
+      }
 
       if (!res.ok) {
         if (res.status === 400 && body.errors) {
@@ -104,8 +126,12 @@ function ArtisanSignUpPage({ children }: { children: React.ReactNode }) {
         return;
       }
 
-      const result = await res.json();
-      console.log("Artesão criado com sucesso:", result);
+      await showUiError("sucesso: Artesão foi enviado para analise.");
+      setTimeout(() => {
+        if (closeButtonRef.current) {
+          closeButtonRef.current.click();
+        }
+      }, 3000);
     } catch (error) {
       console.error("Erro ao criar artesão:", error);
     }
@@ -144,21 +170,17 @@ function ArtisanSignUpPage({ children }: { children: React.ReactNode }) {
     }
   };
 
-  const onSubmit: SubmitHandler<ArtisanData> = (data) => {
-    createArtisan(data);
+  const onSubmit: SubmitHandler<ArtisanData> = async (data) => {
+    await createArtisan(data);
   };
-
-  // Verifica se há erros no formulário
-  const formErrorFlag = Object.keys(errors).length > 0;
 
   // Exibir erro de formulário se houver e ocultar após 5 segundos
   useEffect(() => {
-    if (formErrorFlag) {
+    if (Object.keys(errors).length > 0) {
       setShowFormError(true);
-      const timer = setTimeout(() => setShowFormError(false), 5000);
-      return () => clearTimeout(timer);
+      setTimeout(() => setShowFormError(false), 5000);
     }
-  }, [formErrorFlag]);
+  }, [errors]);
 
   // Renderização do componente
   return (
@@ -315,24 +337,24 @@ function ArtisanSignUpPage({ children }: { children: React.ReactNode }) {
             <select
               className={`w-full p-2 h-12 rounded-3xl inset-shadow-sm inset-shadow-black/40 bg-mint
                 ${
-                  errors.purposeClassification
+                  errors.finalityClassification
                     ? "text-magenta border-2 border-magenta"
                     : "text-mint-700"
                 }`}
-              {...register("purposeClassification")}
+              {...register("finalityClassification")}
             >
               <option
                 value=""
-                className={errors.purposeClassification ? "text-magenta" : ""}
+                className={errors.finalityClassification ? "text-magenta" : ""}
               >
                 Classificação Finalidade*
               </option>
               <option value="decorativo">Decorativo</option>
               <option value="utilitario">Utilitário</option>
             </select>
-            {errors.purposeClassification && (
+            {errors.finalityClassification && (
               <p className="text-sm text-magenta font-normal">
-                {errors.purposeClassification.message}
+                {errors.finalityClassification.message}
               </p>
             )}
           </div>
@@ -403,6 +425,12 @@ function ArtisanSignUpPage({ children }: { children: React.ReactNode }) {
             </Button>
           </div>
         </form>
+
+        <DialogClose asChild>
+          <button ref={closeButtonRef} style={{ display: "none" }}>
+            Fechar
+          </button>
+        </DialogClose>
       </div>
     </div>
   );

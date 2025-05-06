@@ -3,7 +3,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { DialogTitle } from "@radix-ui/react-dialog";
 import { useForm, SubmitHandler } from "react-hook-form";
-import { z } from "zod";
+import { set, z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   AiOutlineEye,
@@ -125,6 +125,7 @@ export default function SignUp({ children }: { children: React.ReactNode }) {
   const [uiError, setUiError] = useState<string | null>(null);
   const [formErrorFlag, setFormErrorFlag] = useState(false);
   const [showArtesian, setShowArtesian] = useState(false);
+  const [token, setToken] = useState<string | null>(null);
 
   const popoverRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -210,7 +211,6 @@ export default function SignUp({ children }: { children: React.ReactNode }) {
         userPhoto: body.avatar,
       };
 
-      localStorage.setItem("authToken", body.token);
       setUser(user);
     } catch (err: any) {
       showUiError(err.message || "Erro inesperado ao fazer login.");
@@ -221,12 +221,12 @@ export default function SignUp({ children }: { children: React.ReactNode }) {
   const createUser = async (data: SignUpData): Promise<boolean> => {
     const payload = {
       name: data.name,
-      socialName: data.socialName,
       cpf: data.cpf,
       email: data.email,
       password: data.password,
       birthDate: data.birthDate,
       phone: `${data.codigoPais}${data.ddd}${data.phone}`,
+      ...(data.socialName && data.socialName.trim() !== "" && { socialName: data.socialName }),
     };
 
     clearErrors();
@@ -262,6 +262,8 @@ export default function SignUp({ children }: { children: React.ReactNode }) {
         return false;
       }
 
+      const token = body.accessToken;
+      setToken(token);
       await loginUser(data.email, data.password);
       showUiError("Usuário criado e logado com sucesso!");
       return true;
@@ -289,8 +291,8 @@ export default function SignUp({ children }: { children: React.ReactNode }) {
   };
 
   // Abre o modal de artesão
-  if (showArtesian) {
-    return <SignupArtesian>{children}</SignupArtesian>;
+  if (showArtesian && token) {
+    return <SignupArtesian token={token}>{children}</SignupArtesian>;
   }
 
   // Renderiza o componente principal
