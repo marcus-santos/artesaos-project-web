@@ -49,7 +49,7 @@ function AuthenticationModal() {
       {user.isAuthenticated && (
         <div className="flex items-center justify-center">
           <Image
-            src={user.userPhoto}
+            src={user.userPhoto ?? "/default-avatar.webp"}
             alt="User Avatar"
             width={60}
             height={60}
