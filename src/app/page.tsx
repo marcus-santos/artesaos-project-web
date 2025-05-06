@@ -5,7 +5,8 @@ export default function Home() {
     <>
       <Header />
       <div className="flex flex-col items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-poppins)]">
-        <div className="flex flex-col items-center justify-center gap-8">
+        <img className="w-full" src="pagina_inicial.png" alt="fundo" />
+        {/* <div className="flex flex-col items-center justify-center gap-8">
           <h1 className="text-4xl font-bold text-center">Criarte</h1>
           <p className="text-lg text-center">
             Uma plataforma de arte para artesãos
@@ -17,7 +18,7 @@ export default function Home() {
             Aqui você pode encontrar uma variedade de produtos artesanais feitos
             com amor e dedicação.
           </p>
-        </div>
+        </div> */}
       </div>
     </>
   );
