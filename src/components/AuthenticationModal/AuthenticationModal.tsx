@@ -46,7 +46,17 @@ function AuthenticationModal() {
           </Button>
         </DialogTrigger>
       )}
-      {user.isAuthenticated && <p>{user.userName}</p>}
+      {user.isAuthenticated && (
+        <div className="flex items-center justify-center">
+          <Image
+            src={user.userPhoto}
+            alt="User Avatar"
+            width={60}
+            height={60}
+            className="rounded-full"
+          />
+        </div>
+      )}
 
       <DialogContent className="w-full h-screen rounded-none sm:rounded-xl sm:h-fit sm:max-w-[425px]">
         {modalState === 0 && (
