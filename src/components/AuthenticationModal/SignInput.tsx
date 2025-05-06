@@ -1,29 +1,65 @@
 import { Input } from "@/components/ui/input";
 import { forwardRef } from "react";
 
-interface SignInputProps {
+interface SignInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
+  icon?: React.ReactNode;
+  iconPosition?: "left" | "right";
+  iconSize?: string;
+  iconClassName?: string;
+  className?: string;
   placeholder: string;
   type: string;
   hasError?: boolean;
+  errorMessage?: string;
 }
 
 const SignInput = forwardRef<HTMLInputElement, SignInputProps>(
-  ({ hasError, placeholder, type, ...rest }, ref) => {
-
+  (
+    {
+      hasError,
+      className ,
+      placeholder,
+      icon,
+      iconPosition = "left",
+      iconClassName = "",
+      type,
+      errorMessage,
+      ...rest
+    },
+    ref
+  ) => {
     return (
-      <Input
-        ref={ref}
-        type={type} 
-        placeholder={placeholder}
-        className={`${hasError
-          ? "border-magenta border-2 focus-visible:ring-2 focus-visible:border-magenta placeholder:text-magenta"
-          : "placeholder:text-color-mint-700"}
-          bg-[#E4F5E9]  placeholder:px-3 placeholder:text-sm placeholder:font-bold w-full h-12 rounded-3xl inset-shadow-sm inset-shadow-black/40`}
-        {...rest} />
-    )
+      <div className={`${className} bg-white font-normal`}>
+        <div className={`relative overflow-hidden`}>
+          <Input
+            ref={ref}
+            type={type}
+            placeholder={placeholder}
+            className={`bg-[#FFF2DE] placeholder:text-[#985E00] placeholder:px-3 placeholder:text-sm placeholder:font-bold w-full h-12 rounded-3xl inset-shadow-sm inset-shadow-black/40 ${className}
+            ${
+              hasError &&
+              "border-magenta border-2 focus-visible:ring-2 focus-visible:border-magenta placeholder:text-magenta"
+            }`}
+            {...rest}
+          />
+          {icon && iconPosition === "right" && (
+            <span
+              className={`absolute right-3 top-1/2 -translate-y-1/2 ${iconClassName}`}
+            >
+              {icon}
+            </span>
+          )}
+        </div>
+        {hasError && errorMessage && (
+          <span className="text-sm text-magenta block mt-1">
+            {errorMessage}
+          </span>
+        )}
+      </div>
+    );
   }
 );
 
-SignInput.displayName = 'SignInput';
+SignInput.displayName = "SignInput";
 
 export default SignInput;

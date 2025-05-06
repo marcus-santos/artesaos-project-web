@@ -1,5 +1,11 @@
 export type UserProps = {
   userName: string;
   userPhoto: string;
-  authenticated?: boolean;
+  isAuthenticated?: boolean;
+};
+
+export type UserStore = {
+  user: UserProps;
+  setUser: (user: UserProps) => void;
+  resetStore: () => void;
 };
