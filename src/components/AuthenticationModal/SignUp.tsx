@@ -14,6 +14,9 @@ import { FaExclamationTriangle, FaRegCalendarAlt } from "react-icons/fa";
 import SignInput from "../AuthenticationModal/SignInput";
 import { Button } from "@/components/ui/button";
 import { DialogClose } from "@radix-ui/react-dialog";
+import SignupArtesian from "./SignUpArtesian";
+import useStoreUser from "@/hooks/useStoreUser";
+import { UserProps } from "@/types/UserProps";
 
 // Validação com Zod
 const signUpSchema = z
@@ -106,6 +109,7 @@ async function traduzirErro(mensagem: string): Promise<string> {
 // Componente principal
 export default function SignUp({ children }: { children: React.ReactNode }) {
   const closeButtonRef = useRef<HTMLButtonElement>(null);
+  const setUser = useStoreUser((state) => state.setUser);
   const API_URL =
     process.env.NEXT_PUBLIC_API_URL ||
     "https://nest-api-fork.onrender.com/users";
@@ -120,8 +124,10 @@ export default function SignUp({ children }: { children: React.ReactNode }) {
   });
   const [uiError, setUiError] = useState<string | null>(null);
   const [formErrorFlag, setFormErrorFlag] = useState(false);
+  const [showArtesian, setShowArtesian] = useState(false);
 
   const popoverRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   // React Hook Form
   const {
@@ -175,6 +181,16 @@ export default function SignUp({ children }: { children: React.ReactNode }) {
     }
   }, [errors, isSubmitted]);
 
+  useEffect(() => {
+    if (
+      (formErrorFlag || uiError) &&
+      window.innerHeight < 750 &&
+      containerRef.current
+    ) {
+      containerRef.current.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  }, [formErrorFlag || uiError]);
+
   // Faz o login após o cadastro
   const loginUser = async (email: string, password: string) => {
     try {
@@ -189,17 +205,20 @@ export default function SignUp({ children }: { children: React.ReactNode }) {
         throw new Error(body.message || "Erro ao fazer login.");
       }
 
-      localStorage.setItem("authToken", body.token);
+      const user: UserProps = {
+        userName: body.name,
+        userPhoto: body.avatar,
+      };
 
-      showUiError("Usuário criado e logado com sucesso!");
-      closeButtonRef.current?.click();
+      localStorage.setItem("authToken", body.token);
+      setUser(user);
     } catch (err: any) {
       showUiError(err.message || "Erro inesperado ao fazer login.");
     }
   };
 
   // Cria o usuário
-  const createUser = async (data: SignUpData) => {
+  const createUser = async (data: SignUpData): Promise<boolean> => {
     const payload = {
       name: data.name,
       socialName: data.socialName,
@@ -232,20 +251,23 @@ export default function SignUp({ children }: { children: React.ReactNode }) {
               }
             )
           );
-          return;
+          return false;
         }
         if (res.status === 409) {
-          await showUiError(body.message || "Usuário já existe.");
-          return;
+          const msgTraduzida = await traduzirErro(body.message);
+          await showUiError(msgTraduzida || "Usuário já existe.");
+          return false;
         }
         await showUiError(body.message || "Erro ao criar usuário.");
-        return;
+        return false;
       }
 
       await loginUser(data.email, data.password);
-      await showUiError("Usuário criado e logado com sucesso!");
+      showUiError("Usuário criado e logado com sucesso!");
+      return true;
     } catch (err: any) {
       await showUiError(err.message || "Erro inesperado.");
+      return false;
     }
   };
 
@@ -258,33 +280,25 @@ export default function SignUp({ children }: { children: React.ReactNode }) {
 
   // Envia os dados do formulário
   const onSubmit: SubmitHandler<SignUpData> = async (data) => {
-    await createUser(data);
+    const created = await createUser(data);
+    if (created && data.isArtisan) {
+      setShowArtesian(true);
+    } else if (created) {
+      closeButtonRef.current?.click();
+    }
   };
 
-  // Formulário para (email, senha, nome, CPF)
-  const FormField: React.FC<{
-    name: keyof SignUpData;
-    placeholder: string;
-    type: string;
-    className?: string;
-  }> = ({ name, placeholder, type, className = "" }) => (
-    <div className={className}>
-      <SignInput
-        className="bg-[#FFF2DE] placeholder:text-[#985E00]"
-        placeholder={placeholder}
-        type={type}
-        hasError={!!errors[name]}
-        {...register(name)}
-      />
-      {errors[name] && (
-        <span className="text-sm text-magenta">{errors[name]?.message}</span>
-      )}
-    </div>
-  );
+  // Abre o modal de artesão
+  if (showArtesian) {
+    return <SignupArtesian>{children}</SignupArtesian>;
+  }
 
   // Renderiza o componente principal
   return (
-    <div className="rounded-lg p-[44px] sm:w-96 w-full">
+    <div
+      ref={containerRef}
+      className="rounded-lg p-4 sm:p-11 w-full max-w-md overflow-y-auto"
+    >
       <header className="mb-6">
         {formErrorFlag ? (
           <div className="flex items-center justify-center text-white bg-magenta mb-4 p-3 rounded-lg text-xs font-bold w-full">
@@ -324,17 +338,51 @@ export default function SignUp({ children }: { children: React.ReactNode }) {
 
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="space-y-3 mb-6 text-[#985E00]"
+        className="space-y-2 mb-6 text-[#985E00]"
       >
-        <FormField name="name" placeholder="Nome*" type="text" />
-        <FormField name="socialName" placeholder="Nome Social" type="text" />
-        <FormField name="cpf" placeholder="CPF*" type="text" />
-        <FormField name="email" placeholder="Email*" type="email" />
+        <div className="w-full">
+          <SignInput
+            placeholder="Nome*"
+            type="text"
+            {...register("name")}
+            hasError={!!errors.name}
+            errorMessage={errors.name?.message}
+          />
+        </div>
+
+        <div className="w-full">
+          <SignInput
+            placeholder="Nome Social"
+            type="text"
+            {...register("socialName")}
+            hasError={!!errors.socialName}
+            errorMessage={errors.socialName?.message}
+          />
+        </div>
+
+        <div className="w-full">
+          <SignInput
+            placeholder="CPF*"
+            type="text"
+            {...register("cpf")}
+            hasError={!!errors.cpf}
+            errorMessage={errors.cpf?.message}
+          />
+        </div>
+
+        <div className="w-full">
+          <SignInput
+            placeholder="Email*"
+            type="email"
+            {...register("email")}
+            hasError={!!errors.email}
+            errorMessage={errors.email?.message}
+          />
+        </div>
 
         <div className="w-full">
           <div className="relative">
             <SignInput
-              className="bg-[#FFF2DE] placeholder:text-[#985E00]"
               placeholder="Data de nascimento*"
               type={visibleFields.calendarVisible ? "date" : "text"}
               hasError={!!errors.birthDate}
@@ -345,27 +393,25 @@ export default function SignUp({ children }: { children: React.ReactNode }) {
               onBlur={() =>
                 setVisibleFields((p) => ({ ...p, calendarVisible: false }))
               }
+              errorMessage={errors.birthDate?.message}
+              icon={
+                !visibleFields.calendarVisible && (
+                  <FaRegCalendarAlt
+                    size={16}
+                    className={`pointer-events-none ${
+                      errors.birthDate ? "text-magenta" : "text-[#985E00]"
+                    }`}
+                  />
+                )
+              }
+              iconPosition="right"
             />
-            {!visibleFields.calendarVisible && (
-              <FaRegCalendarAlt
-                size={16}
-                className={`pointer-events-none absolute right-3 top-1/2 transform -translate-y-1/2 ${
-                  errors.birthDate ? "text-magenta" : "text-[#985E00]"
-                }`}
-              />
-            )}
           </div>
-          {errors.birthDate && (
-            <span className="text-sm text-magenta">
-              {errors.birthDate.message}
-            </span>
-          )}
         </div>
 
         <div className="w-full">
           <div className="relative">
             <SignInput
-              className="bg-[#FFF2DE] font-bold placeholder:text-[#985E00]"
               placeholder="Senha*"
               type={visibleFields.password ? "text" : "password"}
               hasError={!!errors.password}
@@ -376,85 +422,66 @@ export default function SignUp({ children }: { children: React.ReactNode }) {
               onBlur={() =>
                 setVisibleFields((p) => ({ ...p, passwordInfo: false }))
               }
+              errorMessage={errors.password?.message}
+              icon={
+                <button
+                  type="button"
+                  onClick={() => toggleVisibility("password")}
+                  className="p-1 focus:outline-none"
+                  aria-label="Alternar visibilidade da senha"
+                >
+                  {visibleFields.password ? (
+                    <AiOutlineEye size={20} />
+                  ) : (
+                    <AiOutlineEyeInvisible size={20} />
+                  )}
+                </button>
+              }
+              iconPosition="right"
+              iconClassName={`absolute right-3 top-1/2 -translate-y-1/2 ${
+                errors.password ? "text-magenta" : "text-[#985E00]"
+              } cursor-pointer`}
             />
-            <button
-              type="button"
-              aria-label="Toggle senha"
-              onClick={() => toggleVisibility("password")}
-              className="absolute right-3 top-1/2 transform -translate-y-1/2"
-            >
-              {visibleFields.password ? (
-                <AiOutlineEye
-                  size={20}
-                  className={
-                    errors.password ? "text-magenta" : "text-[#985E00]"
-                  }
-                />
-              ) : (
-                <AiOutlineEyeInvisible
-                  size={20}
-                  className={
-                    errors.password ? "text-magenta" : "text-[#985E00]"
-                  }
-                />
-              )}
-            </button>
           </div>
-          {errors.password ? (
-            <span className="text-sm text-magenta">
-              {errors.password.message}
-            </span>
-          ) : (
-            visibleFields.passwordInfo && (
-              <div className="text-xs text-[#985E00] p-2 rounded">
-                <p>• No mínimo 8 caracteres</p>
-                <p>• Pelo menos 1 letra maiúscula</p>
-                <p>• Pelo menos 1 letra minúscula</p>
-                <p>• Pelo menos 1 número</p>
-                <p>• Pelo menos 1 caractere especial</p>
-              </div>
-            )
+          {!errors.password && visibleFields.passwordInfo && (
+            <div className="text-xs text-[#985E00] p-2 rounded">
+              <p>• No mínimo 8 caracteres</p>
+              <p>• Pelo menos 1 letra maiúscula</p>
+              <p>• Pelo menos 1 letra minúscula</p>
+              <p>• Pelo menos 1 número</p>
+              <p>• Pelo menos 1 caractere especial</p>
+            </div>
           )}
         </div>
 
         <div className="w-full">
           <div className="relative">
             <SignInput
-              className="bg-[#FFF2DE] font-bold placeholder:text-[#985E00] "
               placeholder="Confirmação de Senha*"
               type={visibleFields.confirmPassword ? "text" : "password"}
               hasError={!!errors.confirmPassword}
               {...register("confirmPassword")}
+              icon={
+                <button
+                  type="button"
+                  onClick={() => toggleVisibility("confirmPassword")}
+                  className="p-1 focus:outline-none"
+                  aria-label="Alternar visibilidade da senha"
+                >
+                  {visibleFields.confirmPassword ? (
+                    <AiOutlineEye size={20} />
+                  ) : (
+                    <AiOutlineEyeInvisible size={20} />
+                  )}
+                </button>
+              }
+              iconPosition="right"
+              iconClassName={`absolute right-3 top-1/2 -translate-y-1/2 ${
+                errors.confirmPassword ? "text-magenta" : "text-[#985E00]"
+              } cursor-pointer`}
+              errorMessage={errors.confirmPassword?.message}
             />
-            <button
-              type="button"
-              aria-label="Toggle confirmação"
-              onClick={() => toggleVisibility("confirmPassword")}
-              className={`absolute right-3 top-1/2 transform -translate-y-1/2 
-              }`}
-            >
-              {visibleFields.confirmPassword ? (
-                <AiOutlineEye
-                  size={20}
-                  className={
-                    errors.confirmPassword ? "text-magenta" : "text-[#985E00]"
-                  }
-                />
-              ) : (
-                <AiOutlineEyeInvisible
-                  size={20}
-                  className={
-                    errors.confirmPassword ? "text-magenta" : "text-[#985E00]"
-                  }
-                />
-              )}
-            </button>
           </div>
-          {errors.confirmPassword && (
-            <span className="text-sm text-magenta">
-              {errors.confirmPassword.message}
-            </span>
-          )}
         </div>
 
         <div className="grid grid-cols-4 gap-2">
@@ -467,7 +494,7 @@ export default function SignUp({ children }: { children: React.ReactNode }) {
 
           <div className="text-center">
             <SignInput
-              className="bg-[#FFF2DE] placeholder:text-[#985E00]"
+              className="placeholder:px-1 text-center"
               placeholder="DDD"
               type="text"
               {...register("ddd")}
@@ -477,7 +504,6 @@ export default function SignUp({ children }: { children: React.ReactNode }) {
 
           <div className="col-span-2">
             <SignInput
-              className="bg-[#FFF2DE] placeholder:text-[#985E00]"
               placeholder="Telefone"
               type="tel"
               {...register("phone")}
@@ -511,8 +537,7 @@ export default function SignUp({ children }: { children: React.ReactNode }) {
             aria-label="Info artesão"
             onClick={() => toggleVisibility("popover")}
           >
-            {" "}
-            <AiOutlineInfoCircle />{" "}
+            <AiOutlineInfoCircle />
           </button>
         </div>
         {visibleFields.popover && (
