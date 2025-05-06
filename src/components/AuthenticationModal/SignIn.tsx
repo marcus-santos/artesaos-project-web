@@ -95,6 +95,7 @@ function SignIn({
         </div>
         <form className="space-y-3 mb-3 text-end" onSubmit={handleSubmit(onSubmit)}>
           <SignInput
+            className="bg-[#E4F5E9] placeholder:text-[#4D7558]"
             hasError={!!errors.email}
             placeholder={"Email"}
             type={"email"}
@@ -102,6 +103,7 @@ function SignIn({
           />
           <div className="relative">
             <SignInput
+              className="bg-[#E4F5E9] placeholder:text-[#4D7558]"
               hasError={!!errors.password}
               placeholder={"Senha"}
               type={visiblePassword ? "text" : "password"}
