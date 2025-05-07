@@ -58,7 +58,7 @@ function AuthenticationModal() {
         </div>
       )}
 
-      <DialogContent className="w-full h-screen rounded-none sm:rounded-xl sm:h-fit sm:max-w-[425px]">
+      <DialogContent className="w-full max-h-[99vh] overflow-y-scroll rounded-none sm:rounded-xl sm:h-fit sm:max-w-[425px]">
         {modalState === 0 && (
           <div className="flex flex-col justify-center gap-8">
             <Image
