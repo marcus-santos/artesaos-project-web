@@ -7,7 +7,7 @@ import AuthenticationModal from "./AuthenticationModal/AuthenticationModal";
 
 function header() {
   return (
-    <header className="w-full bg-mint-200 pt-16 pb-8 px-4 grid gap-6 sm:px-12 md:grid-cols-12 lg:px-40 lg:gap-8">
+    <header className="w-full bg-mint-200 pt-16 pb-8 px-4 sm:px-12 lg:px-54 grid gap-6 md:grid-cols-12 lg:gap-8">
       <div className="flex items-center justify-between md:col-span-8">
         <div className="">
           <IoMenu size={30} />
