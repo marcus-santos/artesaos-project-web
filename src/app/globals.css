@@ -5,12 +5,12 @@
 
 @theme {
   --color-solar: #ff9d00;
-  --color-solar-700: #E05D00;
+  --color-solar-700: #e05d00;
   --color-mint: #abcfb5;
   --color-mint-50: #e0eae3;
   --color-mint-700: #334137;
   --color-mint-200: #abcfb5;
-  --color-mint-600: #1B7132;
+  --color-mint-600: #1b7132;
   --color-golden: #ffbb00;
   --color-golden-50: #fffdf3;
   --color-golden-100: #fffed6;
@@ -133,5 +133,27 @@
   }
   body {
     @apply bg-background text-foreground;
+  }
+}
+
+@layer utilities {
+  .text-stroke-md {
+    -webkit-text-stroke: 2px #2c012f;
+  }
+
+  .text-stroke-lg {
+    -webkit-text-stroke: 6px #2c012f;
+  }
+  .text-stroke-sm {
+    -webkit-text-stroke: 2px #2c012f;
+  }
+
+  @media (min-width: 1024px) {
+    .text-stroke-lg {
+      -webkit-text-stroke: 8px #2c012f;
+    }
+    .text-stroke-md {
+      -webkit-text-stroke: 4px #2c012f;
+    }
   }
 }
