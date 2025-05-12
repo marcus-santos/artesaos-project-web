@@ -15,12 +15,12 @@ function StrokedText({ children, size, className }: StrokedTextProps) {
       ? "text-stroke-md"
       : "text-stroke-sm";
   return (
-    <div className="relative">
+    <div className="relative flex">
       {/* texto atras para sensação de stroke */}
-      <span className={cn("text-md absolute", className, strokeClass)}>
+      <span className={cn("text-md absolute z-10", className, strokeClass)}>
         {children}
       </span>
-      <span className={cn("text-md text-white relative z-10", className)}>
+      <span className={cn("text-md text-white relative z-20", className)}>
         {children}
       </span>
     </div>
