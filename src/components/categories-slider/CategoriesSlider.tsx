@@ -10,10 +10,10 @@ import "swiper/css/scrollbar";
 
 function CategoriesSlider() {
   return (
-    <div className="w-[100vw] ml-12 sm:w-[95vw] md:w-[85vw] sm:px-12 lg:px-10 sm:mx-20 mx-10 relative">
+    <div className="w-[100vw] ml-12 sm:w-[95vw] sm:px-6 md:w-full sm:mx-20 mx-10 relative">
       {/* Custom navigation buttons */}
-      <div className="swiper-button-prev absolute translate-y-[200%] -left-6 sm:-translate-y-1/2 z-10 scale-0 sm:scale-75"></div>
-      <div className="swiper-button-next absolute translate-y-[200%] -right-6 sm:-translate-y-1/2 z-10 scale-0 sm:scale-75"></div>
+      <div className="swiper-button-prev absolute translate-y-[200%] sm:-translate-y-1/2 z-10 scale-0 md:scale-75 text-gray-400"></div>
+      <div className="swiper-button-next absolute translate-y-[200%] sm:-translate-y-1/2 z-10 scale-0 md:scale-75 text-gray-400"></div>
       <div>
         <Swiper
           modules={[Navigation, Pagination]}
