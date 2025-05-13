@@ -7,21 +7,12 @@ import {
   DialogTrigger,
   DialogClose,
 } from "@/components/ui/dialog";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import { useState } from "react";
 import SignIn from "./SignIn";
 import SignUp from "./SignUp";
 import { FiChevronLeft } from "react-icons/fi";
-import useStoreUser from "@/hooks/useStoreUser";
 
 function AuthenticationModal() {
   const [modalState, setModalState] = useState(0);
