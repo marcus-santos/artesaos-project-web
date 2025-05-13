@@ -20,14 +20,7 @@ function header() {
           height={20}
           priority
         />
-        <AuthenticationModal></AuthenticationModal>
-        {/* <Button
-          onClick={handleClick}
-          variant="outline"
-          className="bg-transparent cursor-pointer hover:bg-white/20 border-black text-black inset-shadow-black/50 inset-shadow-sm p-6 rounded-full underline underline-offset-1 text-xs"
-        >
-          Entre ou cadastre-se
-        </Button> */}
+        <AuthenticationModal />
       </div>
       <div className="relative md:col-span-4">
         <Input
