@@ -43,7 +43,7 @@ function AuthenticationModal() {
         </Button>
       </DialogTrigger>
 
-      <DialogContent className="w-full sm:max-h-[99vh] h-[95vh] overflow-y-scroll rounded-xl sm:h-fit sm:max-w-[425px]">
+      <DialogContent className="w-full sm:max-h-[99vh] h-[95vh] overflow-y-auto rounded-xl sm:h-fit sm:max-w-[425px]">
         {modalState === 0 && (
           <div className="flex flex-col justify-center gap-8">
             <Image
