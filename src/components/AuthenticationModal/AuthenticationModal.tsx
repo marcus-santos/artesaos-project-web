@@ -7,6 +7,14 @@ import {
   DialogTrigger,
   DialogClose,
 } from "@/components/ui/dialog";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import { useState } from "react";
@@ -18,7 +26,6 @@ import useStoreUser from "@/hooks/useStoreUser";
 function AuthenticationModal() {
   const [modalState, setModalState] = useState(0);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const user = useStoreUser((state) => state.user);
 
   function openInitial() {
     setModalState(0);
@@ -32,31 +39,18 @@ function AuthenticationModal() {
 
   return (
     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-      {!user.isAuthenticated && (
-        <DialogTrigger asChild>
-          <Button
-            onClick={() => {
-              openInitial();
-              setIsDialogOpen(true);
-            }}
-            variant="outline"
-            className="bg-transparent cursor-pointer hover:bg-white/20 border-black text-black inset-shadow-black/50 inset-shadow-sm p-6 rounded-full underline underline-offset-1 text-xs"
-          >
-            Entre ou cadastre-se
-          </Button>
-        </DialogTrigger>
-      )}
-      {user.isAuthenticated && (
-        <div className="flex items-center justify-center">
-          <Image
-            src={user.userPhoto ?? "/default-avatar.webp"}
-            alt="User Avatar"
-            width={60}
-            height={60}
-            className="rounded-full"
-          />
-        </div>
-      )}
+      <DialogTrigger asChild>
+        <Button
+          onClick={() => {
+            openInitial();
+            setIsDialogOpen(true);
+          }}
+          variant="outline"
+          className="bg-transparent cursor-pointer hover:bg-white/20 border-black text-black inset-shadow-black/50 inset-shadow-sm p-6 rounded-full underline underline-offset-1 text-xs"
+        >
+          Entre ou cadastre-se
+        </Button>
+      </DialogTrigger>
 
       <DialogContent className="w-full sm:max-h-[99vh] h-[95vh] overflow-y-scroll rounded-xl sm:h-fit sm:max-w-[425px]">
         {modalState === 0 && (
