@@ -7,21 +7,12 @@ import {
   DialogTrigger,
   DialogClose,
 } from "@/components/ui/dialog";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import { useState } from "react";
 import SignIn from "./SignIn";
 import SignUp from "./SignUp";
 import { FiChevronLeft } from "react-icons/fi";
-import useStoreUser from "@/hooks/useStoreUser";
 
 function AuthenticationModal() {
   const [modalState, setModalState] = useState(0);
@@ -52,7 +43,7 @@ function AuthenticationModal() {
         </Button>
       </DialogTrigger>
 
-      <DialogContent className="w-full sm:max-h-[99vh] h-[95vh] overflow-y-scroll rounded-xl sm:h-fit sm:max-w-[425px]">
+      <DialogContent className="w-full sm:max-h-[99vh] h-[95vh] overflow-y-auto rounded-xl sm:h-fit sm:max-w-[425px]">
         {modalState === 0 && (
           <div className="flex flex-col justify-center gap-8">
             <Image
