@@ -1,10 +1,32 @@
+"use client";
 import React from "react";
 import { Button } from "./ui/button";
 import { BaseCard, ProductCardBody } from "./Card";
 import Image from "next/image";
 import products from "../db-mock/products.json";
+import { useState, useEffect } from "react";
 
 function PopularProducts() {
+  const [visibleProducts, setVisibleProducts] = useState(products);
+
+  useEffect(() => {
+    const handleResize = () => {
+      const width = window.innerWidth;
+      let maxItems = products.length;
+
+      if (width > 1024) maxItems = 15; // small screens
+      else if (width > 768) maxItems = 8; // medium screens
+      else if (width > 640) maxItems = 6; // all on larger screens
+      else maxItems = 4; // default for small screens
+
+      setVisibleProducts(products.slice(0, maxItems));
+    };
+
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, [products]);
+
   return (
     <>
       <div className="flex justify-between items-center">
@@ -13,8 +35,8 @@ function PopularProducts() {
           Ver Mais
         </Button>
       </div>
-      <div className="justify-between items-center grid grid-cols-6 gap-8 mt-4">
-        {products.map((product, i) => (
+      <div className="items-center grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 md:grid-cols-4 gap-4 mt-4">
+        {visibleProducts.map((product, i) => (
           <BaseCard key={i}>
             <div className="relative w-full h-34 md:h-40">
               <Image
