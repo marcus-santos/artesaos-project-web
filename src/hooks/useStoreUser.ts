@@ -9,6 +9,7 @@ const useStoreUser = create<UserStore>()(
         userName: "",
         userPhoto: "",
         isAuthenticated: false,
+        isModarator: true,
       },
       setUser: (user: UserProps) =>
         set(() => ({
@@ -16,6 +17,7 @@ const useStoreUser = create<UserStore>()(
             userName: user.userName,
             userPhoto: user.userPhoto,
             isAuthenticated: true,
+            isModarator: user.isModerator,
           },
         })),
       resetStore: () =>
@@ -24,6 +26,7 @@ const useStoreUser = create<UserStore>()(
             userName: "",
             userPhoto: "",
             isAuthenticated: false,
+            isModerator: false,
           },
         })),
     }),

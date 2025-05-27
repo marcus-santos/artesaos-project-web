@@ -2,6 +2,7 @@ export type UserProps = {
   userName: string;
   userPhoto: string;
   isAuthenticated?: boolean;
+  isModerator?: boolean;
 };
 
 export type UserStore = {

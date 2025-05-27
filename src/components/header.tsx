@@ -1,6 +1,7 @@
 "use client";
 import Image from "next/image";
 import { IoMenu } from "react-icons/io5";
+import Link from "next/link";
 import { Input } from "@/components/ui/input";
 import { IoIosSearch } from "react-icons/io";
 import AuthenticationModal from "./AuthenticationModal/AuthenticationModal";
@@ -47,11 +48,18 @@ function header() {
                 />
               </div>
             </DropdownMenuTrigger>
-            <DropdownMenuContent className="bg-mint-50 border-none">
-              <DropdownMenuItem>Editar Perfil</DropdownMenuItem>
+            <DropdownMenuContent className="bg-mint-50 border-none cursor-pointer">
+              <DropdownMenuItem className="cursor-pointer">
+                Editar Perfil
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <Link href="/moderator" className="cursor-pointer">
+                  Moderação
+                </Link>
+              </DropdownMenuItem>
               <DropdownMenuSeparator className="bg-mint-600" />
               <DropdownMenuItem
-                className="text-red-700"
+                className="text-red-700 cursor-pointer"
                 onClick={() => {
                   resetStore();
                 }}

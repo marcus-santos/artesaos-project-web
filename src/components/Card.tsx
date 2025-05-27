@@ -2,14 +2,14 @@ import React from "react";
 import { FaRegHeart } from "react-icons/fa";
 
 type ṔroductCardProps = {
-  price: string;
+  price: number;
   title: string;
   author: string;
 };
 
 function BaseCard({ children }: { children: React.ReactNode }) {
   return (
-    <div className="border border-mint-200 p-2 flex flex-col max-w-40 rounded-lg mt-4">
+    <div className="border border-mint-200 p-2 flex flex-col sm:max-w-40 rounded-lg md:max-w-full">
       {children}
     </div>
   );
