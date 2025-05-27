@@ -11,8 +11,7 @@ function BannerNovidades() {
             className="font-bold lg:text-3xl text-2xl w-fit"
           >
             Fique por dentro
-            <br className="sm:hidden" />
-            das novidades!
+            <br className="sm:hidden" /> das novidades!
           </StrokedText>
           <Image
             src={"/bell.png"}
