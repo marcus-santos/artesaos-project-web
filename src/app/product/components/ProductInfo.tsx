@@ -4,8 +4,8 @@ import React from 'react';
 import Button from './Button';
 import { CiHeart } from "react-icons/ci";
 import { FaWhatsapp } from "react-icons/fa";
-import { IoMdShareAlt, IoIosArrowDown  } from "react-icons/io";
-
+import { IoMdShareAlt } from "react-icons/io";
+import { IoIosArrowDown } from "react-icons/io";
 
 interface ProductInfoProps {
     title: string;
@@ -28,14 +28,16 @@ const ProductInfo = ({
         <div className='mx-8 my-4 space-y-4'>
             <div>
                 <h1 className='text-2xl font-bold text-gray-800'>{title}</h1>
-                <p className='text-[#1B7132] text-2xl font-bold mt-1'>{price}</p>
+                <p className='text-[#1B7132] text-2xl font-bold mt-2'>{price}</p>
             </div>
             
             {description && (
                 <details className="group">
-                    <summary className="list-none cursor-pointer text-[#1B7132] hover:text-[#156029] transition-colors flex items-center gap-2">
+                    <summary className="cursor-pointer text-[#1B7132] hover:text-[#156029] transition-colors flex items-center gap-2">
                         Ver mais detalhes do produto
-                        <span className="transition-transform group-open:rotate-180"><IoIosArrowDown /></span>
+                        <span className="transition-transform group-open:rotate-180">
+                            <IoIosArrowDown />
+                        </span>
                     </summary>
                     <p className="mt-2 text-gray-600 text-sm leading-relaxed">
                         {description}
