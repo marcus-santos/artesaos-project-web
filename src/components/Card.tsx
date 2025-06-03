@@ -19,11 +19,13 @@ function ProductCardBody({ price, title, author }: ṔroductCardProps) {
   return (
     <>
       <header className="flex justify-between items-center mt-2 mb-2">
-        <p className="font-bold text-mint-600 truncate">R$ {price}</p>
+        <p className="font-bold lg:text-xl md:text-lg text-mint-600 truncate">
+          R$ {price}
+        </p>
         <FaRegHeart size={25} color="#E00061" />
       </header>
-      <p className="text-xs truncate">{title}</p>
-      <p className="text-xs truncatr italic font-light">{author}</p>
+      <p className="text-xs lg:text-lg truncate">{title}</p>
+      <p className="text-xs lg:text-lg truncate italic font-light">{author}</p>
     </>
   );
 }

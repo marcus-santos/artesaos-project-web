@@ -26,8 +26,7 @@ function BannerNovidades() {
           className="lg:text-xl text-lg w-full text-right sm:text-left flex justify-end"
         >
           Inovação, qualidade e
-          <br className="sm:hidden" />
-          compromisso em cada detalhe
+          <br className="sm:hidden" /> compromisso em cada detalhe
         </StrokedText>
       </div>
     </div>
