@@ -35,7 +35,7 @@ function PopularProducts() {
           Ver Mais
         </Button>
       </div>
-      <div className="items-center grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 md:grid-cols-4 gap-4 mt-4">
+      <div className="items-center grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 md:grid-cols-4 gap-4 mt-4 lg:gap-y-6">
         {visibleProducts.map((product, i) => (
           <BaseCard key={i}>
             <div className="relative w-full h-34 md:h-40">

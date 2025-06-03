@@ -1,5 +1,6 @@
 import React from "react";
-import { FaRegHeart } from "react-icons/fa";
+import { FaRegHeart, FaPlus } from "react-icons/fa";
+import { Button } from "./ui/button";
 
 type ṔroductCardProps = {
   price: number;
@@ -9,7 +10,7 @@ type ṔroductCardProps = {
 
 function BaseCard({ children }: { children: React.ReactNode }) {
   return (
-    <div className="border border-mint-200 p-2 flex flex-col sm:max-w-40 rounded-lg md:max-w-full">
+    <div className="border border-mint-200 p-2 flex flex-col sm:max-w-40 rounded-lg lg:max-w-65">
       {children}
     </div>
   );
@@ -26,6 +27,10 @@ function ProductCardBody({ price, title, author }: ṔroductCardProps) {
       </header>
       <p className="text-xs lg:text-lg truncate">{title}</p>
       <p className="text-xs lg:text-lg truncate italic font-light">{author}</p>
+      <Button className="bg-sakura cursor-pointer hover:bg-sakura/70 text-xl font-bold">
+        <FaPlus />
+        Detalhes
+      </Button>
     </>
   );
 }

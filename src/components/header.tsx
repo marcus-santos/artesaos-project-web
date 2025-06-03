@@ -21,7 +21,7 @@ function header() {
   const resetStore = useStoreUser((state) => state.resetStore);
 
   return (
-    <header className="w-full bg-mint-200 pt-16 pb-8 px-4 sm:px-12 lg:px-54 grid gap-6 md:grid-cols-12 lg:gap-8">
+    <header className="w-full bg-midnight pt-16 pb-8 px-4 sm:px-12 lg:px-54 grid gap-6 md:grid-cols-12 lg:gap-8">
       <div className="flex items-center justify-between md:col-span-8">
         <div className="">
           <IoMenu size={30} />
@@ -55,13 +55,16 @@ function header() {
               <DropdownMenuItem asChild>
                 <Link
                   href="/moderator"
-                  className={`cursor-pointer ${!user.isModerator ? "pointer-events-none cursor-none opacity-50" : ""}`}
+                  className={`cursor-pointer ${
+                    !user.isModerator
+                      ? "pointer-events-none cursor-none opacity-50"
+                      : ""
+                  }`}
                   tabIndex={user.isModerator ? 0 : -1}
                   aria-disabled={!user.isModerator}
                 >
                   Moderação
                 </Link>
-
               </DropdownMenuItem>
               <DropdownMenuSeparator className="bg-mint-600" />
               <DropdownMenuItem
