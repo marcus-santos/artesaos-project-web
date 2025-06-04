@@ -9,6 +9,13 @@ import products from './components/products.json';
 import ProductAuthor from './components/ProductAuthor';
 import ProductReviews from './components/ProductReviews';
 
+interface Review {
+    reviewer: string;
+    rating: number;
+    reviewText: string;
+    reviewImages?: string[];
+}
+
 interface Product {
     id?: number;
     title: string;
@@ -16,6 +23,15 @@ interface Product {
     author: string;
     description: string;
     img: string;
+    reviews?: Review[]; 
+}
+
+interface FormattedReview {
+    reviewerImage?: string;
+    reviewerName: string;
+    rating: number;
+    reviewText: string;
+    reviewImages?: string[];
 }
 
 function ProductPage() {
@@ -32,8 +48,18 @@ function ProductPage() {
         price: `R$ ${currentProduct.price.toFixed(2).replace('.', ',')}`,
         description: currentProduct.description,
         author: currentProduct.author,
-        image: currentProduct.img
+        image: currentProduct.img,
     };
+
+    const productReviews: FormattedReview[] = currentProduct.reviews ? 
+        currentProduct.reviews.map(review => ({
+            reviewerName: review.reviewer,
+            rating: review.rating,
+            reviewText: review.reviewText,
+            reviewImages: review.reviewImages,
+            reviewerImage: undefined 
+        })) 
+        : [];
 
     const handleShare = () => {
         if (navigator.share) {
@@ -41,6 +67,10 @@ function ProductPage() {
                 title: productData.title,
                 text: `Confira este produto: ${productData.title} por ${productData.author}`,
                 url: window.location.href,
+            }).catch(error => {
+                console.log('Erro ao compartilhar:', error);
+                navigator.clipboard.writeText(window.location.href);
+                alert('Link copiado para a área de transferência!');
             });
         } else {
             navigator.clipboard.writeText(window.location.href);
@@ -70,11 +100,11 @@ function ProductPage() {
                             <ProductImage 
                                 src={`/${productData.image}`} 
                                 alt={productData.title}
-                                className="aspect-retangle max-h-96"
+                                className="aspect-rectangle max-h-96 rounded-lg"
                             />
                         </div>
                         
-                        <div className="flex flex-col justify-center">
+                        <div className="flex flex-col justify-center p-4">
                             <ProductInfo
                                 title={productData.title}
                                 price={productData.price}
@@ -86,7 +116,7 @@ function ProductPage() {
                         </div>
                     </div>
 
-                    <div>
+                    <div className="lg:px-4">
                         <ProductAuthor 
                             name={productData.author}
                             avatar={`/${productData.image}`} 
@@ -98,9 +128,19 @@ function ProductPage() {
                         />
                     </div>
 
-                    <div className="mt-8 mb-8">
-                        <ProductReviews />
-                    </div>
+                    {productReviews.length > 0 && (
+                        <div className="mt-8">
+                            <ProductReviews 
+                                reviews={productReviews}
+                            />
+                        </div>
+                    )}
+
+                    {productReviews.length === 0 && (
+                        <div className="text-center py-8 text-gray-500">
+                            <p>Este produto ainda não possui avaliações.</p>
+                        </div>
+                    )}
                 </div>
             </main>
         </div>

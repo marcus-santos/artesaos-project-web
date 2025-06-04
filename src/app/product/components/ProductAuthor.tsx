@@ -61,7 +61,7 @@ const AuthorProfile = ({
                                 <h3 className="font-semibold text-[#FF6A00] text-lg">{name}</h3>
                             </button>
                             
-                            <div className="flex md:hidden items-center space-x-4 text-xs text-black font-bold">
+                            <div className="flex md:hidden items-center space-x-1 text-xs text-black font-bold">
                                 <span>{formatNumber(followers)} Seguidores</span>
                                 <span>{totalProducts} Produtos</span>
                             </div>
@@ -70,12 +70,12 @@ const AuthorProfile = ({
                 </div>
 
                 <div className="hidden md:flex flex-row gap-2 justify-center">
-                    <div className="flex items-center space-x-4 text-xs text-black font-bold">
-                        <span className="flex items-center space-x-1">
+                    <div className="flex items-center space-x-2 text-xs text-black font-bold">
+                        <span className="flex items-center">
                             <span>{formatNumber(followers)} Seguidores</span>
                         </span>
                         
-                        <span className="flex items-center space-x-1">
+                        <span className="flex items-center">
                             <span>{totalProducts} Produtos</span>
                         </span>
                     </div>
