@@ -76,12 +76,12 @@ function CardReview({reviewerImage, reviewerName, rating, reviewText, reviewImag
                             src={reviewerImage || "https://placehold.co/40"}  
                             alt={`Imagem do usuario ${reviewerName}`} 
                         />
-                        <h3 className="font-bold">{reviewerName}</h3>
+                        <h3 className="font-bold text-[#1F3A4D]">{reviewerName}</h3>
                         <div className="flex">
                             {Array.from({ length: Math.floor(rating) }, (_, index) => (
-                                <FaStar key={index} className="text-yellow-400" />
+                                <FaStar key={index} className="text-[#1F3A4D]" />
                             ))}
-                            {rating % 1 !== 0 && <FaStarHalfAlt className="text-yellow-400" />}
+                            {rating % 1 !== 0 && <FaStarHalfAlt className="text-[#1F3A4D]" />}
                         </div> 
                     </div>
                 <p className="text-gray-600 text-sm">{reviewText}</p>

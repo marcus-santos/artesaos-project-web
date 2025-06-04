@@ -8,6 +8,9 @@ import ProductInfo from './components/ProductInfo';
 import products from './components/products.json';
 import ProductAuthor from './components/ProductAuthor';
 import ProductReviews from './components/ProductReviews';
+import { FiPlus } from 'react-icons/fi';
+import {BaseCard, ProductCardBody}  from '@/components/Card';
+import Image from 'next/image';
 
 interface Review {
     reviewer: string;
@@ -73,9 +76,13 @@ function ProductPage() {
                 alert('Link copiado para a área de transferência!');
             });
         } else {
-            navigator.clipboard.writeText(window.location.href);
-            alert('Link copiado para a área de transferência!');
-        }
+                const textArea = document.createElement('textarea');
+                textArea.value = window.location.href;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.body.removeChild(textArea);
+                alert('Link copiado para a área de transferência!');
+            }
     };
 
     const handleAddToFavorites = () => {
@@ -141,6 +148,59 @@ function ProductPage() {
                             <p>Este produto ainda não possui avaliações.</p>
                         </div>
                     )}
+
+                    <div>
+                        <div className='flex flex-row font-bold text-2xl items-center px-8 py-4'>
+                            <FiPlus/>
+                            <h1>Produtos do Artista</h1>
+                        </div>
+
+                        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 md:grid-cols-4 gap-4 p-4">
+                            {products.map((product, i) => (
+                                <BaseCard key={product.id || i}>
+                                    <div className="relative w-full h-40">
+                                        <Image
+                                            src={"/" + product.img}
+                                            alt={product.title}
+                                            className="rounded-lg object-cover"
+                                            fill
+                                        />
+                                    </div>
+                                    <ProductCardBody
+                                        price={product.price}
+                                        title={product.title}
+                                        author={product.author}
+                                    />
+                                </BaseCard>
+                            ))}
+                        </div>
+                    </div>
+
+                    <div>
+                        <div className='flex flex-row font-bold text-2xl items-center px-8 py-4'>
+                            <h1>Produtos Relacionados</h1>
+                        </div>
+
+                        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 md:grid-cols-4 gap-4 p-4">
+                            {products.map((product, i) => (
+                                <BaseCard key={product.id || i}>
+                                    <div className="relative w-full h-40">
+                                        <Image
+                                            src={"/" + product.img}
+                                            alt={product.title}
+                                            className="rounded-lg object-cover"
+                                            fill
+                                        />
+                                    </div>
+                                    <ProductCardBody
+                                        price={product.price}
+                                        title={product.title}
+                                        author={product.author}
+                                    />
+                                </BaseCard>
+                            ))}
+                        </div>
+                    </div>
                 </div>
             </main>
         </div>
