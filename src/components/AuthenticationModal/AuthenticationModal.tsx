@@ -37,7 +37,7 @@ function AuthenticationModal() {
             setIsDialogOpen(true);
           }}
           variant="outline"
-          className="bg-transparent cursor-pointer hover:bg-white/20 border-black text-black inset-shadow-black/50 inset-shadow-sm p-6 rounded-full underline underline-offset-1 text-xs"
+          className="bg-transparent cursor-pointer hover:bg-white/20 hover:text-white border-white text-white inset-shadow-black/50 inset-shadow-sm p-6 rounded-full underline underline-offset-2 text-xs"
         >
           Entre ou cadastre-se
         </Button>
