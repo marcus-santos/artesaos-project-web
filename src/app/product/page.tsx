@@ -7,6 +7,7 @@ import ProductImage from './components/ProductImage';
 import ProductInfo from './components/ProductInfo';
 import products from './components/products.json';
 import ProductAuthor from './components/ProductAuthor';
+import ProductReviews from './components/ProductReviews';
 
 interface Product {
     id?: number;
@@ -95,6 +96,10 @@ function ProductPage() {
                             onFollow={() => alert('Seguindo!')}
                             onViewProfile={() => alert('Visualizando perfil!')}
                         />
+                    </div>
+
+                    <div className="mt-8 mb-8">
+                        <ProductReviews />
                     </div>
                 </div>
             </main>
