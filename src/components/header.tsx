@@ -10,30 +10,33 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { LogOut } from "lucide-react";
 
 function header() {
   const user = useStoreUser((state) => state.user);
   const resetStore = useStoreUser((state) => state.resetStore);
 
   return (
-    <header className="w-full bg-midnight pt-16 pb-8 px-4 sm:px-12 lg:px-54 grid gap-6 md:grid-cols-12 lg:gap-8">
-      <div className="flex items-center justify-between md:col-span-8">
-        <div className="">
-          <IoMenu size={30} />
+    <header className="w-full bg-midnight pt-16 pb-8 px-4 sm:px-12 lg:px-54 grid gap-6 md:grid-cols-12 lg:gap-8 items-center">
+      <div className="flex items-center md:col-span-8">
+        <div>
+          <IoMenu size={30} color="white" />
         </div>
-        <Image
-          src="Criarte.svg"
-          alt="Criarte Logo"
-          className="md:w-36"
-          width={100}
-          height={20}
-          priority
-        />
+        <Link
+          href={"/"}
+          className="mx-auto md:mx-0 md:ml-8 md:mr-auto cursor-pointer"
+        >
+          <Image
+            src="horizontal-logo.svg"
+            alt="Criarte Logo"
+            className="md:w-36"
+            width={120}
+            height={60}
+            priority
+          />
+        </Link>
         {!user.isAuthenticated && <AuthenticationModal />}
         {user.isAuthenticated && (
           <DropdownMenu>
