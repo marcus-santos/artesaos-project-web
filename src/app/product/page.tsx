@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, {useState} from 'react';
 import { useSearchParams } from 'next/navigation';
 import Header from "@/components/header";
 import ProductImage from './components/ProductImage';
@@ -111,7 +111,7 @@ function ProductPage() {
                             />
                         </div>
                         
-                        <div className="flex flex-col justify-center p-4">
+                        <div className="flex flex-col justify-center">
                             <ProductInfo
                                 title={productData.title}
                                 price={productData.price}
@@ -136,7 +136,7 @@ function ProductPage() {
                     </div>
 
                     {productReviews.length > 0 && (
-                        <div className="mt-8">
+                        <div>
                             <ProductReviews 
                                 reviews={productReviews}
                             />
@@ -150,9 +150,20 @@ function ProductPage() {
                     )}
 
                     <div>
-                        <div className='flex flex-row font-bold text-2xl items-center px-8 py-4'>
-                            <FiPlus/>
-                            <h1>Produtos do Artista</h1>
+                        <div className='flex flex-row items-center'>
+                            <div className='flex items-center gap-2 px-8 py-4 text-2xl font-bold'>
+                                <FiPlus/>
+                                <h1>Produtos do Artista</h1>
+                            </div>
+
+                            <div className='hidden md:flex justify-end flex-1 text-xs items-center px-4'>
+                                <button 
+                                    onClick={() => alert('Ver mais produtos do artista!')}
+                                    className="p-1.5 bg-white text-[#1B7132] border-1 border-[#ABCFB5] rounded-md hover:bg-[#ABCFB5] hover:text-white transition-colors"
+                                >
+                                    Ver mais
+                                </button>
+                            </div>
                         </div>
 
                         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 md:grid-cols-4 gap-4 p-4">
@@ -177,8 +188,19 @@ function ProductPage() {
                     </div>
 
                     <div>
-                        <div className='flex flex-row font-bold text-2xl items-center px-8 py-4'>
-                            <h1>Produtos Relacionados</h1>
+                        <div className='flex flex-row'>
+                            <div className='font-bold text-2xl items-center px-8 py-4'>
+                                <h1>Produtos Relacionados</h1>
+                            </div>
+
+                            <div className='hidden md:flex justify-end flex-1 text-xs items-center px-4'>
+                                <button 
+                                    onClick={() => alert('Ver mais produtos do artista!')}
+                                    className="p-1.5 bg-white text-[#1B7132] border-1 border-[#ABCFB5] rounded-md hover:bg-[#ABCFB5] hover:text-white transition-colors"
+                                >
+                                    Ver mais
+                                </button>
+                            </div>
                         </div>
 
                         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 md:grid-cols-4 gap-4 p-4">

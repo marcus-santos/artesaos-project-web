@@ -37,8 +37,8 @@ const AuthorProfile = ({
     };
 
     return (
-        <div className="bg-[#E4F5E9] rounded-lg border border-gray-200 px-8 py-4 shadow-sm">
-           <div className="flex items-center justify-between px-4 sm:px-8 md:px-16 lg:px-32 xl:px-40 py-4">
+        <div className="bg-[#E4F5E9] border border-gray-200 shadow-sm">
+           <div className="flex items-center justify-between px-8 py-6 lg:py-9 sm:px-8 md:px-16 lg:px-45 ">
                 <div className="flex flex-col gap-2">
                     <div className="flex items-center gap-3">
                         {avatar ? (
@@ -58,7 +58,7 @@ const AuthorProfile = ({
                                 onClick={onViewProfile}
                                 className="text-left hover:text-[#1B7132] transition-colors"
                             >
-                                <h3 className="font-semibold text-[#FF6A00] text-lg">{name}</h3>
+                                <h3 className="font-semibold text-[#1F3A4D] text-lg">{name}</h3>
                             </button>
                             
                             <div className="flex md:hidden items-center space-x-1 text-xs text-black font-bold">

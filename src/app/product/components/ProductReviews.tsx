@@ -43,15 +43,15 @@ function TotalEstrelas({ estrelas }: ITotalEstrelas) {
 function FiltroEstrelas({ estrelas, onClick, text, isActive }: Filtro) {
     return (
         <button 
-            className={`flex items-center gap-2 cursor-pointer p-2 border rounded-sm transition-colors ${
+            className={`flex items-center gap-1 cursor-pointer p-1 border rounded-sm transition-colors ${
                 isActive 
                     ? 'bg-[#82BC92] text-white border-[#82BC92]' 
                     : 'border-[#82BC92] hover:bg-[#82BC92] hover:text-white'
             }`} 
             onClick={onClick}
         >
-            {text && <span className="text-sm font-bold">{text}</span>}
-            {!text && <span className="text-sm font-bold">{estrelas}.0</span>}
+            {text && <span className="text-xs font-bold">{text}</span>}
+            {!text && <span className="text-xs font-bold">{estrelas}.0</span>}
             {!text && (
                 <div className="flex">
                     {Array.from({ length: estrelas }, (_, index) => (
@@ -150,42 +150,45 @@ function ProductReviews({reviews}: ProductReviewsProps) {
     };
 
     return(
-        <div className="p-4">
-            <div className="flex flex-wrap w-full md:grid-cols-3 justify-center items-center gap-4 p-4 bg-[#FFFFFF] rounded-lg shadow-lg mt-2">
-                <div className="flex flex-col justify-center items-center font-bold p-5">
-                    <h2 className="text-3xl mb-2">{averageRating.toFixed(1)}</h2>
+        <>
+            <div className="flex flex-row w-full md:grid-cols-3 justify-center items-center gap-6 py-5 px-8 bg-[#FFFFFF] rounded-lg shadow-lg">
+                <div className="flex flex-col justify-center items-center font-bold">
+                    <h2 className="text-3xl">{averageRating.toFixed(1)}</h2>
                     <TotalEstrelas estrelas={averageRating}/>
                 </div>
 
-                <div className="flex flex-col lg:flex-row  justify-center items-center">
-                    <div className="flex flex-wrap lg:flex-row justify-center items-center gap-2">
-                        <FiltroEstrelas 
-                            text={`todos(${reviewsData.length})`} 
-                            estrelas={0} 
-                            onClick={() => handleFilterClick(0)} 
-                            isActive={activeFilter === 0}
-                        />  
-                        <FiltroEstrelas 
-                            estrelas={5} 
-                            onClick={() => handleFilterClick(5)} 
-                            isActive={activeFilter === 5}
-                        />
-                        <FiltroEstrelas 
-                            estrelas={4} 
-                            onClick={() => handleFilterClick(4)} 
-                            isActive={activeFilter === 4}
-                        />
-                        <FiltroEstrelas 
-                            estrelas={3} 
-                            onClick={() => handleFilterClick(3)} 
-                            isActive={activeFilter === 3}
-                        />
-                        <FiltroEstrelas 
-                            estrelas={2} 
-                            onClick={() => handleFilterClick(2)} 
-                            isActive={activeFilter === 2}
-                        />  
-                    </div>
+                <div className="flex flex-wrap lg:flex-row justify-center items-center gap-2">
+                    <FiltroEstrelas 
+                        text={`Todos(${reviewsData.length})`} 
+                        estrelas={0} 
+                        onClick={() => handleFilterClick(0)} 
+                        isActive={activeFilter === 0}
+                    />  
+                    <FiltroEstrelas 
+                        estrelas={5} 
+                        onClick={() => handleFilterClick(5)} 
+                        isActive={activeFilter === 5}
+                    />
+                    <FiltroEstrelas 
+                        estrelas={4} 
+                        onClick={() => handleFilterClick(4)} 
+                        isActive={activeFilter === 4}
+                    />
+                    <FiltroEstrelas 
+                        estrelas={3} 
+                        onClick={() => handleFilterClick(3)} 
+                        isActive={activeFilter === 3}
+                    />
+                    <FiltroEstrelas 
+                        estrelas={2} 
+                        onClick={() => handleFilterClick(2)} 
+                        isActive={activeFilter === 2}
+                    />  
+                    <FiltroEstrelas 
+                        estrelas={1} 
+                        onClick={() => handleFilterClick(1)} 
+                        isActive={activeFilter === 1}
+                    />  
                 </div>
             </div>
 
@@ -216,7 +219,7 @@ function ProductReviews({reviews}: ProductReviewsProps) {
                     </div>
                 )}
             </div>
-        </div>
+        </>
     );
 }
 
