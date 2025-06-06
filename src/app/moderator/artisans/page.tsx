@@ -6,7 +6,7 @@ function page() {
   return (
     <>
       <ModeratorHeader />
-      <ModeratorTitle />
+      <ModeratorTitle title={'Artesãos'} />
     </>
   )
 }

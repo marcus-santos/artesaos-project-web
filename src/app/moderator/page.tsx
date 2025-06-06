@@ -3,22 +3,22 @@ import ModeratorCard from "./components/ModeratorCard"
 import ModeratorHeader from "./components/ModeratorHeader"
 import ModeratorTitle from "./components/ModeratorTitle"
 import ModeratorNotification from "./components/ModeratorNotification"
+import Footer from "@/components/Footer"
 
 function page() {
   return (
-    <>
+    <div className="overflow-x-hidden">
       <ModeratorHeader />
-      <ModeratorTitle imageSrc={"Criarte.svg"} />
-      <ModeratorNotification/>
-      <div className="w-2/3 mx-auto flex justify-center gap-10 mb-20">
-        <ModeratorCard icon={<MdSupervisorAccount size={50} />} title={"Artesãos"} description={"Aprovar, editar, desativar contas..."} pending={0} finished={56} />
-        <ModeratorCard icon={<MdSupervisorAccount size={50} />} title={"Produtos"} description={"Visualizar, excluir produtos."} pending={0} finished={56} />
-        <ModeratorCard icon={<MdSupervisorAccount size={50} />} title={"Denúncias"} description={"Gerenciar denúncias"} pending={0} finished={56} />
-        <ModeratorCard icon={<MdSupervisorAccount size={50} />} title={"Documentação"} description={"Acessar documentos importantes."} pending={0} finished={56} />
+      <ModeratorTitle title={'Moderação'} />
+      <div className="w-2/3 mx-auto grid grid-cols-1 justify-items-center md:grid-cols-2 xl:grid-cols-4 gap-10 mb-20">
+        <ModeratorCard title={"Artesãos"} description={"Aprovar, editar, desativar contas..."} pending={0} finished={56} />
+        <ModeratorCard title={"Produtos"} description={"Visualizar, excluir produtos."} pending={0} finished={56} />
+        <ModeratorCard title={"Denúncias"} description={"Gerenciar denúncias"} pending={0} finished={56} />
+        <ModeratorCard title={"Documentação"} description={"Acessar documentos importantes."} pending={0} finished={56} />
       </div>
-      
-
-    </>
+      <ModeratorNotification />
+      <Footer />
+    </div>
 
   )
 }

@@ -1,7 +1,7 @@
+import { Button } from "@/components/ui/button";
 import Link from "next/link";
 
 interface ModeratorCardProps {
-  icon: React.ReactNode;
   title: string;
   description: string;
   pending: number;
@@ -9,27 +9,28 @@ interface ModeratorCardProps {
 }
 
 function ModeratorCard({
-  icon,
   title,
   description,
   pending,
   finished }: ModeratorCardProps
 ) {
   return (
-    <div className="w-56 flex flex-col justify-center text-sm items-center text-center px-4 py-7 ring-2 ring-black/10 shadow-md shadow-black/10 rounded-xl hover:transform hover:scale-105 duration-300 cursor-pointer">
-      <Link href={`/moderator/artisans`} className="w-full h-full flex flex-col items-center">
-        {icon}
-        <p className="font-bold my-4">{title}</p>
-        <p className="">{description}</p>
-        <div className="flex gap-5 my-5">
-          <p className="font-bold text-sm">Pendentes</p>
-          <p className="font-bold text-sm">Concluídos</p>
-        </div>
-        <div className="flex gap-19">
-          <p className="text-sm">{pending}</p>
-          <p className="text-sm">{finished}</p>
-        </div>
-      </Link>
+    <div className="w-52 flex flex-col text-midnight justify-center text-sm items-center text-center px-4 py-7 ring-2 ring-black/10 shadow-md shadow-black/10 rounded-xl hover:transform hover:scale-105 duration-300">
+      <p className="font-bold my-4">{title}</p>
+      <p>{description}</p>
+      <div className="flex gap-5 my-4">
+        <p className="font-bold text-sm">Pendentes</p>
+        <p className="font-bold text-sm">Concluídos</p>
+      </div>
+      <div className="flex gap-19">
+        <p className="text-sm">{pending}</p>
+        <p className="text-sm">{finished}</p>
+      </div>
+      <Button asChild className="w-36 h-7 mt-4 rounded-2xl text-sm bg-midnight">
+        <Link href={`/moderator/artisans`} className=" flex flex-col items-center text-xs">
+          Ver Todos
+        </Link>
+      </Button>
     </div>
   )
 }
