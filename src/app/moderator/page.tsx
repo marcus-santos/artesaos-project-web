@@ -17,10 +17,10 @@ function page() {
         <ModeratorCard title={"Documentação"} description={"Acessar documentos importantes."} pending={0} finished={56} />
       </div>
       <ModeratorNotification />
-      <Footer />
+      <Footer newsSubscription={false} />
     </div>
 
   )
 }
 
-export default page
+export default page;
