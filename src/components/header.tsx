@@ -29,7 +29,7 @@ function header() {
           className="mx-auto md:mx-0 md:ml-8 md:mr-auto cursor-pointer"
         >
           <Image
-            src="horizontal-logo.svg"
+            src="/horizontal-logo.svg"
             alt="Criarte Logo"
             className="md:w-36"
             width={120}
