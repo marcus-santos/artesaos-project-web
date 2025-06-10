@@ -1,13 +1,14 @@
 'use client';
 
-import React, {useState} from 'react';
-import { useSearchParams } from 'next/navigation';
+import React from 'react';
+import { useParams } from 'next/navigation';
 import Header from "@/components/header";
-import ProductImage from './components/ProductImage';
-import ProductInfo from './components/ProductInfo';
-import products from './components/products.json';
-import ProductAuthor from './components/ProductAuthor';
-import ProductReviews from './components/ProductReviews';
+import Footer from "@/components/Footer";
+import ProductImage from '../components/ProductImage';
+import ProductInfo from '../components/ProductInfo';
+import products from '../components/products.json';
+import ProductAuthor from '../components/ProductAuthor';
+import ProductReviews from '../components/ProductReviews';
 import { FiPlus } from 'react-icons/fi';
 import {BaseCard, ProductCardBody}  from '@/components/Card';
 import Image from 'next/image';
@@ -38,8 +39,8 @@ interface FormattedReview {
 }
 
 function ProductPage() {
-    const searchParams = useSearchParams();
-    const productId = searchParams.get('id');
+    const params = useParams();
+    const productId = params.id as string;
     
     const currentProduct: Product = products.find((product: Product) => 
         product.id?.toString() === productId
@@ -225,6 +226,8 @@ function ProductPage() {
                     </div>
                 </div>
             </main>
+
+            <Footer newsSubscription={true} />
         </div>
     );
 }
