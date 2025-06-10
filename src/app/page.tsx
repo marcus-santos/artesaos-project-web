@@ -20,7 +20,7 @@ export default function Home() {
           <PopularProducts />
         </div>
       </main>
-      <Footer />
+      <Footer newsSubscription={true} />
     </>
   );
 }

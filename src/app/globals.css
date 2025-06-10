@@ -4,7 +4,10 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme {
+  --color-dust-300: #F9DDBD;
+  --color-dust-500: #DDB587;
   --color-midnight: #1f3a4d;
+  --color-baby-blue: #A6E3E9;
   --color-sakura: #ff8c94;
   --color-solar: #ff9d00;
   --color-solar-300: #ff730f;
@@ -19,6 +22,7 @@
   --color-golden: #ffbb00;
   --color-golden-50: #fffdf3;
   --color-golden-100: #fffed6;
+  --color-salmon: #E33A46;
   --color-magenta: #e00061;
   --color-magenta-700: #ac004b;
   --color-grape: #6c1b71;
