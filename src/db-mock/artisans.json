@@ -1,36 +1,36 @@
 [
   {
-    "key": 1,
+    "id": 1,
     "name": "João da Silva",
     "email": "joao.silva@email.com",
     "status": "PENDING"
   },
   {
-    "key": 2,
+    "id": 2,
     "name": "Maria Oliveira",
     "email": "maria.oliveira@email.com",
     "status": "APPROVED"
   },
   {
-    "key": 3,
+    "id": 3,
     "name": "Carlos Souza",
     "email": "carlos.souza@email.com",
     "status": "REJECTED"
   },
   {
-    "key": 4,
+    "id": 4,
     "name": "Ana Paula",
     "email": "ana.paula@email.com",
     "status": "INACTIVE"
   },
   {
-    "key": 5,
+    "id": 5,
     "name": "Fernanda Lima",
     "email": "fernanda.lima@email.com",
     "status": "PENDING"
   },
   {
-    "key": 6,
+    "id": 6,
     "name": "Ricardo Gomes",
     "email": "ricardo.gomes@email.com",
     "status": "APPROVED"
