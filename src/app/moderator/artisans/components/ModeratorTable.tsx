@@ -32,15 +32,15 @@ function ModeratorTable() {
             if (artisan.status === "PENDING") {
               actionCell = (
                 <div className="flex py-1 justify-center items-center gap-2.5">
-                  <Button className="h-6 text-xs my-1 bg-green-600" aria-label="Aprovar artesão">
+                  <Button className="h-6 text-xs my-1 bg-green-600 cursor-pointer" aria-label="Aprovar artesão">
                     <FaCheck className="text-white" />
                     APROVAR
                   </Button>
-                  <Button className="h-6 text-xs my-1 bg-yellow-600/75" aria-label="Editar artesão">
+                  <Button className="h-6 text-xs my-1 bg-yellow-600/75 cursor-pointer" aria-label="Editar artesão">
                     <LuPencil className="text-white" />
                     EDITAR
                   </Button>
-                  <Button className="h-6 text-xs my-1 bg-red-700" aria-label="Recusar artesão">
+                  <Button className="h-6 text-xs my-1 bg-red-700 cursor-pointer" aria-label="Recusar artesão">
                     <BsXLg className="text-white" />
                     RECUSAR
                   </Button>
@@ -49,11 +49,11 @@ function ModeratorTable() {
             } else if (artisan.status === "APPROVED") {
               actionCell = (
                 <div className="flex justify-center items-center gap-2.5">
-                  <Button className="h-6 text-xs my-1 bg-yellow-600/75" aria-label="Editar artesão">
+                  <Button className="h-6 text-xs my-1 bg-yellow-600/75 cursor-pointer" aria-label="Editar artesão">
                     <LuPencil className="text-white" />
                     EDITAR
                   </Button>
-                  <Button className="h-6 text-xs my-1 bg-white font-bold border border-red-600 text-red-600" aria-label="Desativar artesão">
+                  <Button className="h-6 text-xs my-1 bg-white font-bold border border-red-600 text-red-600 cursor-pointer" aria-label="Desativar artesão">
                     <BsXLg className="text-red-600" />
                     DESATIVAR
                   </Button>
@@ -62,7 +62,7 @@ function ModeratorTable() {
             } else if (artisan.status === "REJECTED") {
               actionCell = (
                 <div className="flex justify-center items-center gap-2.5">
-                  <Button className="h-6 text-xs my-1 bg-green-600" aria-label="Aprovar artesão">
+                  <Button className="h-6 text-xs my-1 bg-green-600 cursor-pointer" aria-label="Aprovar artesão">
                     <FaCheck className="text-white" />
                     APROVAR
                   </Button>
@@ -75,11 +75,11 @@ function ModeratorTable() {
             } else if (artisan.status === "INACTIVE") {
               actionCell = (
                 <div className="flex justify-center items-center gap-2.5">
-                  <Button className="h-6 text-xs my-1 bg-white border border-green-600 text-green-600" aria-label="Aprovar artesão">
+                  <Button className="h-6 text-xs my-1 bg-white border border-green-600 text-green-600 cursor-pointer" aria-label="Aprovar artesão">
                     <FaCheck className="text-green-600" />
                     ATIVAR
                   </Button>
-                  <Button className="h-6 text-xs my-1 bg-yellow-600/75" aria-label="Editar artesão">
+                  <Button className="h-6 text-xs my-1 bg-yellow-600/75 cursor-pointer" aria-label="Editar artesão">
                     <LuPencil className="text-white" />
                     EDITAR
                   </Button>

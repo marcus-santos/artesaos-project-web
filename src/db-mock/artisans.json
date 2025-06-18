@@ -13,7 +13,12 @@
     "art_type": "Wood sculpture",
     "business_type": "MEI",
     "registration_number": "1234567890",
-    "status": "PENDING"
+    "status": "PENDING",
+    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque euismod, urna eu tincidunt consectetur, nisi nisl aliquam nunc, eget aliquam massa nisl quis neque. Sed euismod, nisl quis aliquam ultricies, nunc nisl aliquam nunc, eget aliquam massa nisl quis neque. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque euismod, urna eu tincidunt consectetur.",
+    "media": [
+      "https://github.com/marcus-santos.png",
+      "https://github.com/marcus-santos.png"
+    ]
   },
   {
     "id": 2,
@@ -29,7 +34,11 @@
     "art_type": "Embroidery",
     "business_type": "CNPJ",
     "registration_number": "9876543210",
-    "status": "APPROVED"
+    "status": "APPROVED",
+    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque euismod, urna eu tincidunt consectetur, nisi nisl aliquam nunc, eget aliquam massa nisl quis neque. Sed euismod, nisl quis aliquam ultricies, nunc nisl aliquam nunc, eget aliquam massa nisl quis neque. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque euismod, urna eu tincidunt consectetur.",
+    "media": [
+      "https://github.com/marcus-santos.png"
+    ]
   },
   {
     "id": 3,
@@ -45,7 +54,13 @@
     "art_type": "Ceramics",
     "business_type": "MEI",
     "registration_number": "1122334455",
-    "status": "REJECTED"
+    "status": "REJECTED",
+    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque euismod, urna eu tincidunt consectetur, nisi nisl aliquam nunc, eget aliquam massa nisl quis neque. Sed euismod, nisl quis aliquam ultricies, nunc nisl aliquam nunc, eget aliquam massa nisl quis neque. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque euismod, urna eu tincidunt consectetur.",
+    "media": [
+      "https://github.com/marcus-santos.png",
+      "https://github.com/marcus-santos.png",
+      "https://github.com/marcus-santos.png"
+    ]
   },
   {
     "id": 4,
@@ -61,7 +76,11 @@
     "art_type": "Canvas painting",
     "business_type": "CNPJ",
     "registration_number": "5566778899",
-    "status": "INACTIVE"
+    "status": "INACTIVE",
+    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque euismod, urna eu tincidunt consectetur, nisi nisl aliquam nunc, eget aliquam massa nisl quis neque. Sed euismod, nisl quis aliquam ultricies, nunc nisl aliquam nunc, eget aliquam massa nisl quis neque. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque euismod, urna eu tincidunt consectetur.",
+    "media": [
+      "https://github.com/marcus-santos.png"
+    ]
   },
   {
     "id": 5,
@@ -77,7 +96,12 @@
     "art_type": "Jewelry",
     "business_type": "MEI",
     "registration_number": "6677889900",
-    "status": "PENDING"
+    "status": "PENDING",
+    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque euismod, urna eu tincidunt consectetur, nisi nisl aliquam nunc, eget aliquam massa nisl quis neque. Sed euismod, nisl quis aliquam ultricies, nunc nisl aliquam nunc, eget aliquam massa nisl quis neque. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque euismod, urna eu tincidunt consectetur.",
+    "media": [
+      "https://github.com/marcus-santos.png",
+      "https://github.com/marcus-santos.png"
+    ]
   },
   {
     "id": 6,
@@ -93,6 +117,12 @@
     "art_type": "Leather crafts",
     "business_type": "CNPJ",
     "registration_number": "7788990011",
-    "status": "APPROVED"
+    "status": "APPROVED",
+    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque euismod, urna eu tincidunt consectetur, nisi nisl aliquam nunc, eget aliquam massa nisl quis neque. Sed euismod, nisl quis aliquam ultricies, nunc nisl aliquam nunc, eget aliquam massa nisl quis neque. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque euismod, urna eu tincidunt consectetur.",
+    "media": [
+      "https://github.com/marcus-santos.png",
+      "https://github.com/marcus-santos.png",
+      "https://github.com/marcus-santos.png"
+    ]
   }
 ]

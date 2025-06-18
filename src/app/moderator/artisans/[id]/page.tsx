@@ -10,7 +10,7 @@ import { BsXLg } from "react-icons/bs"
 import Image from "next/image"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { IoIosArrowDown } from "react-icons/io"
+import { IoIosArrowDown, IoIosInformationCircleOutline } from "react-icons/io"
 
 function Page() {
   const params = useParams();
@@ -91,27 +91,104 @@ function Page() {
         </div>
       </div>
 
-      <div className="w-2/3 flex flex-col h-[218px] mx-auto my-8 p-5 text-midnight rounded-lg shadow ring-[0.5px] ring-black/20 shadow-black/30">
+      <div className="w-2/3 flex flex-col mx-auto my-8 p-5 text-midnight rounded-lg shadow ring-[0.5px] ring-black/20 shadow-black/30">
         <h3 className="font-semibold mb-5">Dados Profissionais</h3>
-        <div className="w-full flex gap-5 mb-5">
+        <div className="max-w-[960px] flex justify-around gap-5 mb-5">
           <div className="w-full">
-            <Label className="text-xs font-semibold">Tipo de Artesanato/ Arte</Label>
-            <Input value={artisan?.art_type} readOnly className="max-w-[450px] border border-midnight" />
+            <Label className="text-xs font-semibold mb-1">Tipo de Artesanato/ Arte</Label>
+            <div className="relative max-w-[450px]">
+              <Input
+                value={artisan?.art_type}
+                readOnly
+                className="border border-midnight pr-8"
+              />
+              <IoIosArrowDown className="absolute right-2 top-1/2 -translate-y-1/2 text-xl text-midnight pointer-events-none" />
+            </div>
           </div>
-          
+
           <div className="min-w-18">
-            <Label className="text-xs font-semibold">MEI ou CNPJ</Label>
-            <Input value={artisan?.business_type} readOnly className="max-w-24 border border-midnight"/>
-            <IoIosArrowDown />
+            <Label className="text-xs font-semibold mb-1">MEI ou CNPJ</Label>
+            <div className="relative max-w-[200px]">
+              <Input
+                value={artisan?.business_type}
+                readOnly
+                className="border border-midnight pr-8"
+              />
+              <IoIosArrowDown className="absolute right-2 top-1/2 -translate-y-1/2 text-xl text-midnight pointer-events-none" />
+            </div>
           </div>
-          
+
           <div className="w-full">
-            <Label className="text-xs font-semibold">Número</Label>
-            <Input value={artisan?.registration_number} readOnly className="max-w-64 border border-midnight"/>
+            <Label className="text-xs font-semibold mb-1">Número</Label>
+            <Input value={artisan?.registration_number} readOnly className="max-w-64 border border-midnight" />
+          </div>
+        </div>
+        <div className="flex text-xs font-semibold gap-4">
+          <div className="border border-midnight rounded-md pl-2 pr-4 py-1">
+            <p>Notificações por Email</p>
+            <div className="flex items-center gap-4">
+              <div className="flex items-center gap-2">
+                <Input type="radio" name="option" value="yes" className="w-3" />
+                <span className="font-semibold text-midnight text-xs">Sim</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <Input type="radio" name="option" value="no" className="w-3" />
+                <span className="font-semibold text-midnight text-xs">Não</span>
+              </div>
+            </div>
+          </div>
+          <div className="border border-midnight rounded-md pl-2 pr-4 py-2">
+            <p>Aparecer em destaques e divulgações</p>
+            <div className="flex items-center gap-4">
+              <div className="flex items-center gap-2">
+                <Input type="radio" name="option" value="yes" className="w-3" />
+                <span className="font-semibold text-midnight text-xs">Sim</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <Input type="radio" name="option" value="no" className="w-3" />
+                <span className="font-semibold text-midnight text-xs">Não</span>
+              </div>
+            </div>
+          </div>
+          <div className="border border-midnight rounded-md pl-2 pr-4 py-2">
+            <div className="flex items-center gap-2">
+              <p>Termos de Uso e Política de Privacidade</p>
+              <IoIosInformationCircleOutline className="cursor-pointer text-midnight" size={16} />
+            </div>
+            <div className="flex items-center gap-4">
+              <div className="flex items-center gap-2">
+                <Input type="radio" name="option" value="yes" className="w-3" />
+                <span className="font-semibold text-midnight text-xs">Sim</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <Input type="radio" name="option" value="no" className="w-3" />
+                <span className="font-semibold text-midnight text-xs">Não</span>
+              </div>
+            </div>
           </div>
         </div>
       </div>
-
+      <div className="w-2/3 flex flex-col mx-auto my-8 p-5 text-midnight rounded-lg shadow ring-[0.5px] ring-black/20 shadow-black/30">
+        <h3 className="font-semibold mb-5">Experiências</h3>
+        <p className="text-xs font-semibold mb-5">Breve histórico profissional como artesão</p>
+        <div className="border text-xs border-midnight rounded-md max-w-[960px] min-h-48 h-fit p-3 ">
+          <p>{artisan?.description}</p>
+        </div>
+        <p className="my-5 text-midnight text-xs font-semibold">Midia</p>
+        <div className="flex gap-4">
+          {artisan?.media.map((media, index) => (
+            <div key={index} className="flex flex-col items-center">
+              <Image
+                src={media}
+                alt={`media-${index}`}
+                width={180}
+                height={190}
+                className="rounded-md border-2 border-midnight"
+              />
+            </div>
+          ))}
+        </div>
+      </div>
     </div>
   )
 }
