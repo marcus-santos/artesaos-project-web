@@ -66,7 +66,7 @@ function SignIn({
       const result = await response.json();
 
       if (response.ok) {
-        const isModerator = result.role.includes("MODERATOR")? true : false;
+        const isModerator = result.roles.includes("MODERATOR")? true : false;
         const user: UserProps = {
           userName: result.name,
           userPhoto: result.avatar,
