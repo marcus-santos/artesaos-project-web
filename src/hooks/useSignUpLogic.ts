@@ -52,6 +52,7 @@ export const useSignUpLogic = (
         const res = await fetch(`${API_URL}`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
+          credentials: 'include',
           body: JSON.stringify(payload),
         });
 

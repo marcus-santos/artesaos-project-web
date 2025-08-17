@@ -78,19 +78,19 @@ function ArtisanSignUpPage({
   async function createArtisan(data: ArtisanData) {
     try {
 
-      const res = await fetch("http://localhost:3333/artisans", {
+      const res = await fetch("http://localhost:3333/artisan-applications", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${artisanId}`,
         },
+        credentials: 'include',
         body: JSON.stringify({
           rawMaterial: data.rawMaterial,
           technique: data.technique,
           finalityClassification: data.finalityClassification,
           sicab: data.sicab,
-          sisabRegistrationDate: data.sicabRegistration,
-          sisabValidUntil: data.sicabValidity,
+          sicabRegistrationDate: data.sicabRegistration,
+          sicabValidUntil: data.sicabValidity,
         }),
       });
 
