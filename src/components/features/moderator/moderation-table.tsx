@@ -15,12 +15,13 @@ type Artisan = {
 };
 
 type Report = {
-  id: number;
-  reportType: string;
-  target: string;
-  denunciator: string;
+  id: string;
   reason: string;
-  status: 'PENDING' | 'MODERATED' | 'ARCHIVED';
+  details: string;
+  isSolved: boolean;
+  reporterId: string;
+  targetType: string;
+  createdAt: string;
 };
 
 // Discriminated union for table type
@@ -61,7 +62,8 @@ function ModerationStatusLabel({ status }: { status: string }) {
       <div className="flex items-center gap-2.5">
         <GoClockFill className="text-amber-400" size={16} />
         <p className="p-1 hidden md:inline">
-          {ARTISAN_STATUS_TRANSLATIONS[status]}
+          {ARTISAN_STATUS_TRANSLATIONS[status] ||
+            REPORT_STATUS_TRANSLATIONS[status]}
         </p>
       </div>
     );
@@ -94,16 +96,18 @@ function ModerationStatusLabel({ status }: { status: string }) {
     );
   if (status === 'MODERATED')
     return (
-      <div className="flex items-center justify-center">
-        <p className="font-semibold text-xs sm:text-sm">
+      <div className="flex items-center gap-2">
+        <FaCheck className="text-green-600" size={16} />
+        <p className="p-1 hidden md:inline">
           {REPORT_STATUS_TRANSLATIONS[status]}
         </p>
       </div>
     );
   if (status === 'ARCHIVED')
     return (
-      <div className="flex items-center justify-center">
-        <p className="font-semibold text-xs sm:text-sm">
+      <div className="flex items-center gap-2">
+        <TbCancel size={16} />
+        <p className="p-1 hidden md:inline">
           {REPORT_STATUS_TRANSLATIONS[status]}
         </p>
       </div>
@@ -123,12 +127,27 @@ function ModerationTable(props: ModerationTableProps) {
   const filteredData = useMemo(() => {
     const dataToFilter = searchTerm.trim() ? searchResults : props.data;
 
+    if (!dataToFilter || !Array.isArray(dataToFilter)) {
+      return [];
+    }
+
     if (!searchTerm.trim() && activeFilter !== 'all') {
-      return dataToFilter.filter((item) => item.status === activeFilter);
+      if (props.type === 'artisans') {
+        return dataToFilter.filter(
+          (item) => (item as Artisan).status === activeFilter,
+        );
+      } else {
+        // Para reports, converter isSolved para status
+        return dataToFilter.filter((item) => {
+          const report = item as Report;
+          const reportStatus = report.isSolved ? 'MODERATED' : 'PENDING';
+          return reportStatus === activeFilter;
+        });
+      }
     }
 
     return dataToFilter;
-  }, [props.data, searchResults, searchTerm, activeFilter]);
+  }, [props.data, searchResults, searchTerm, activeFilter, props.type]);
 
   if (isSearching) {
     return (
@@ -203,7 +222,7 @@ function ModerationTable(props: ModerationTableProps) {
             Nenhum relatório encontrado.
           </p>
         ) : (
-          (filteredData as Report[]).map((report) => (
+          (filteredData as Report[]).map((report, index) => (
             <Link
               key={report.id}
               href={`/moderator/reports/${report.id}`}
@@ -211,17 +230,17 @@ function ModerationTable(props: ModerationTableProps) {
             >
               <div className="flex text-sm">
                 <div className="flex items-center">
-                  <div className="border-r py-2.5 text-center w-9">
-                    {report.id}
-                  </div>
+                  <div className="border-r py-2.5 text-center w-9">{index}</div>
                 </div>
                 <div className="grid grid-cols-3 items-center px-3 w-full">
-                  <p className="truncate text-left">{report.target}</p>
+                  <p className="truncate text-left">{report.createdAt}</p>
                   <p className="hidden md:inline text-center whitespace-nowrap">
-                    {report.reportType}
+                    {report.reason}
                   </p>
                   <div className="flex gap-2 md:gap-7 items-center justify-end">
-                    <ModerationStatusLabel status={report.status} />
+                    <ModerationStatusLabel
+                      status={report.isSolved ? 'MODERATED' : 'PENDING'}
+                    />
                     <FiChevronRight
                       className="md:mr-3 group-hover:translate-x-1 transition-transform"
                       size={16}

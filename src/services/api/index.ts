@@ -225,4 +225,24 @@ export const reportApi = {
       method: 'POST',
       body: data,
     }),
+
+  listReports: () => {
+    return apiRequest<
+      [
+        {
+          reports: Array<{
+            id: string;
+            reason: string;
+            details: string;
+            isSolved: boolean;
+            reporterId: string;
+            targetType: string;
+            createdAt: string;
+          }>;
+        },
+      ]
+    >('/reports', {
+      method: 'GET',
+    });
+  },
 };

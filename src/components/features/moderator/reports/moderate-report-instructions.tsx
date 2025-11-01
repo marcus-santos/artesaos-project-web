@@ -12,14 +12,14 @@ function ModerateReportInstructions() {
           <span>Ação/Botão</span>
           <span>Função</span>
         </div>
-
+        {/* 
         <div className="flex gap-4 pt-2 items-center">
           <ModerateArtisanButton variant={'warn'} />
           <span>
             Envia uma notificação ao usuário alertando sobre a violação das
             regras, sem aplicar bloqueio.
           </span>
-        </div>
+        </div> */}
 
         <div className="flex gap-4 pt-2 items-center">
           <ModerateArtisanButton variant={'exclude'} />
@@ -28,7 +28,7 @@ function ModerateReportInstructions() {
           </span>
         </div>
 
-        <div className="flex gap-4 pt-2 items-center">
+        {/* <div className="flex gap-4 pt-2 items-center">
           <ModerateArtisanButton variant={'suspend'} />
           <span>Suspende o acesso do usuário por um período determinado.</span>
         </div>
@@ -52,7 +52,7 @@ function ModerateReportInstructions() {
           <span>
             Reverte a remoção de um conteúdo que foi apagado por engano.
           </span>
-        </div>
+        </div> */}
       </div>
     </div>
   );

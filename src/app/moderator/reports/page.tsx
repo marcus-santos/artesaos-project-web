@@ -4,17 +4,18 @@ import LoadingScreen from '@/components/common/loading-screen';
 import ModerationSearchBar from '@/components/features/moderator/moderation-searchbar';
 import ModerationTable from '@/components/features/moderator/moderation-table';
 import ModerationTitle from '@/components/features/moderator/moderation-title';
-import reportsMock from '@/db-mock/reports.json';
+import { reportApi } from '@/services/api';
 import { useRouter } from 'next/navigation';
 import { useCallback, useEffect, useState } from 'react';
 
 type Report = {
-  id: number;
-  reportType: string;
-  target: string;
-  denunciator: string;
+  id: string;
   reason: string;
-  status: 'PENDING' | 'MODERATED' | 'ARCHIVED';
+  details: string;
+  isSolved: boolean;
+  reporterId: string;
+  targetType: string;
+  createdAt: string;
 };
 
 function Page() {
@@ -29,9 +30,9 @@ function Page() {
       setIsLoading(true);
       // Simulando delay de API
       await new Promise((resolve) => setTimeout(resolve, 500));
-      // const result = await artisanApi.getReports();
-      // setReports(result.reports);
-      setReports(reportsMock as Report[]);
+      const result = await reportApi.listReports();
+      setReports(result);
+      console.log(reports);
       setIsLoading(false);
     } catch (error: unknown) {
       if (error instanceof Error) {
